@@ -24,12 +24,18 @@ import {
   ArrowRight
 } from "lucide-react";
 
+import abrorImg from "./avatars/abror.png";
+import bilolImg from "./avatars/bilol.png";
+import husanImg from "./avatars/husan.png";
+import umarImg from "./avatars/umar.png";
+import shynbergenImg from "./avatars/shynbergen.png";
+
 const teamMembers = [
   {
     name: "Abrorbek Nematov",
     role: "Software Engineer",
     skills: ["NumPy", "Django", "PyTorch"],
-    avatar: "AN",
+    avatar: abrorImg,
     links: {
       github: "https://github.com/ha-wq",
       twitter: "https://x.com/AbrorbekNemat0v",
@@ -40,7 +46,7 @@ const teamMembers = [
     name: "Bilol Bakhrillaev",
     role: "ML Engineer",
     skills: ["NumPy", "OpenCV", "Django"],
-    avatar: "BB",
+    avatar: bilolImg,
     links: {
       github: "https://github.com/bilalsea2",
       twitter: "https://x.com/bilalsbahr",
@@ -50,8 +56,8 @@ const teamMembers = [
   {
     name: "Husan Isomiddinov",
     role: "Product Manager",
-    skills: ["TS", "UI/UX", "Python"],
-    avatar: "HI",
+    skills: ["TypeScript", "UI/UX", "Python"],
+    avatar: husanImg,
     links: {
       github: "https://github.com/husanisomiddinov/",
       twitter: "https://x.com/HusanIsamiddin",
@@ -61,12 +67,21 @@ const teamMembers = [
   {
     name: "Umarbek Umarov",
     role: "Software Engineer",
-    skills: ["Python", "TS", "Tailwind"],
-    avatar: "UU",
+    skills: ["Python", "TypeScript", "Tailwind"],
+    avatar: umarImg,
     links: {
       github: "https://github.com/UmarbekFU",
       twitter: "https://x.com/umarHQ",
       linkedin: "20th.uz"
+    }
+  },
+  {
+    name: "Shynbergen Khojanbergenov",
+    role: "Graphic Designer",
+    skills: ["Graphic Design", "UI/UX"],
+    avatar: shynbergenImg,
+    links: {
+      linkedin: "https://www.linkedin.com/in/shynbergen/"
     }
   }
 ];
@@ -222,15 +237,21 @@ export default function Home() {
               <h2 className="text-3xl md:text-4xl font-bold mb-4">Meet the Builders</h2>
             </AnimatedSection>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
               {teamMembers.map((member, i) => (
                 <AnimatedSection key={i}>
                   <GlassCard className="p-6 text-center tech-border">
                     <motion.div
-                      className="w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-green-700 text-white flex items-center justify-center mx-auto mb-4 text-xl font-bold shadow-lg"
+                      className="w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-green-700 text-white flex items-center justify-center mx-auto mb-4 text-xl font-bold shadow-lg overflow-hidden"
                       whileHover={{ scale: 1.1 }}
                     >
-                      {member.avatar}
+                      <Image
+                        src={member.avatar}
+                        alt={member.name}
+                        width={64}
+                        height={64}
+                        className="w-full h-full object-cover"
+                      />
                     </motion.div>
                     <h3 className="font-semibold">{member.name}</h3>
                     <p className="text-sm text-muted-foreground mb-3">{member.role}</p>
