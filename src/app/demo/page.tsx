@@ -107,7 +107,7 @@ export default function DemoPage() {
 
             if (className.toLowerCase().includes("healthy")) {
                 status = "Healthy";
-                color = "text-green-500";
+                color = "text-[#839a1c]";
                 Icon = CheckCircle2;
                 desc = "Plant shows no signs of stress or disease.";
             } else if (className.toLowerCase().includes("stress") || className.toLowerCase().includes("scorch")) {
@@ -138,7 +138,7 @@ export default function DemoPage() {
             const topResults = sortedProbs.map(item => {
                 let colorClass = "bg-neutral-200";
                 const nameLower = item.name.toLowerCase();
-                if (nameLower.includes("healthy")) colorClass = "bg-green-500";
+                if (nameLower.includes("healthy")) colorClass = "bg-[#f5f7ed]0";
                 else if (nameLower.includes("stress")) colorClass = "bg-blue-500";
                 else if (nameLower.includes("deficiency")) colorClass = "bg-orange-500";
                 else colorClass = "bg-red-500";
@@ -243,11 +243,11 @@ export default function DemoPage() {
             <div className="absolute inset-0 bg-gradient-to-b from-green-50/50 to-transparent pointer-events-none" />
 
             {/* Navigation */}
-            <nav className="fixed top-0 w-full z-50 glass-card border-b border-green-500/10">
+            <nav className="fixed top-0 w-full z-50 glass-card border-b border-[#839a1c]/10">
                 <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-2 group">
-                        <ArrowLeft className="h-5 w-5 text-neutral-600 group-hover:text-green-600 transition" />
-                        <span className="font-medium text-neutral-600 group-hover:text-green-600 transition">Back to Home</span>
+                        <ArrowLeft className="h-5 w-5 text-neutral-600 group-hover:text-[#839a1c] transition" />
+                        <span className="font-medium text-neutral-600 group-hover:text-[#839a1c] transition">Back to Home</span>
                     </Link>
                     <div className="flex items-center gap-2">
                         <Image
@@ -296,9 +296,9 @@ export default function DemoPage() {
                             <p>
                                 <strong>The Technology:</strong> We trained our model using the <strong>ResNet-18 architecture</strong> and the <strong>PlantVillage dataset</strong> (70k+ images of 38 leaf condition types).
                             </p>
-                            <div className="bg-green-50/80 p-4 rounded-lg border border-green-100 my-4">
+                            <div className="bg-[#f5f7ed]/80 p-4 rounded-lg border border-green-100 my-4">
                                 <p className="font-semibold text-green-900 mb-2">💡 In this video demonstration:</p>
-                                <ul className="list-disc list-inside space-y-1 text-sm text-green-800">
+                                <ul className="list-disc list-inside space-y-1 text-sm text-[#566312]">
                                     <li>Husan showcases the model detecting a <strong>healthy corn</strong> leaf.</li>
                                     <li>The model identifies <strong>grape leaf blight</strong> with near 100% confidence.</li>
                                 </ul>
@@ -307,7 +307,7 @@ export default function DemoPage() {
                                 <strong>Future Roadmap:</strong> We plan to implement <strong>hyperspectral and thermal imaging</strong> integrated with drones. We are also working on a <strong>Telegram bot</strong> to let many Uzbek farmers access our platform easily.
                             </p>
                             <div className="flex flex-wrap gap-2 pt-2 border-t border-neutral-200/50 mt-4">
-                                <span className="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-medium">ResNet-18</span>
+                                <span className="px-2 py-1 bg-[#eaedda] text-[#6b7d17] rounded text-xs font-medium">ResNet-18</span>
                                 <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-medium">PlantVillage (70k+)</span>
                                 <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs font-medium">Telegram Bot API</span>
                             </div>
@@ -321,7 +321,7 @@ export default function DemoPage() {
                         <Card
                             className={cn(
                                 "group relative border-2 border-dashed rounded-xl p-8 transition-all duration-200 ease-in-out cursor-pointer",
-                                dragActive ? "border-green-500 bg-green-50 scale-[1.02]" : "border-neutral-200 hover:border-green-400 hover:bg-neutral-50",
+                                dragActive ? "border-[#839a1c] bg-[#f5f7ed] scale-[1.02]" : "border-neutral-200 hover:border-green-400 hover:bg-neutral-50",
                                 image ? "bg-white" : ""
                             )}
                             onDragEnter={(e) => { e.preventDefault(); setDragActive(true); }}
@@ -354,8 +354,8 @@ export default function DemoPage() {
                                 </div>
                             ) : (
                                 <div className="flex flex-col items-center justify-center py-12 text-center text-neutral-500">
-                                    <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                        <Upload className="w-8 h-8 text-green-600" />
+                                    <div className="w-16 h-16 rounded-full bg-[#eaedda] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                        <Upload className="w-8 h-8 text-[#839a1c]" />
                                     </div>
                                     <p className="font-semibold text-neutral-900">Click to upload or drag and drop</p>
                                     <p className="text-sm mt-1">Supports JPG, PNG (Max 10MB)</p>
@@ -365,7 +365,7 @@ export default function DemoPage() {
 
                         <Button
                             size="lg"
-                            className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold text-lg py-6 shadow-lg shadow-green-600/20"
+                            className="w-full bg-[#839a1c] hover:bg-[#6b7d17] text-white font-semibold text-lg py-6 shadow-lg shadow-green-600/20"
                             disabled={!image || isAnalyzing}
                             onClick={runAnalysis}
                         >
@@ -380,8 +380,8 @@ export default function DemoPage() {
 
                         <div className="text-xs text-center">
                             {backendStatus === "online" ? (
-                                <span className="text-green-600 flex items-center justify-center gap-1">
-                                    <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" /> Backend Connected
+                                <span className="text-[#839a1c] flex items-center justify-center gap-1">
+                                    <span className="w-2 h-2 rounded-full bg-[#f5f7ed]0 animate-pulse" /> Backend Connected
                                 </span>
                             ) : backendStatus === "offline" ? (
                                 <span className="text-red-500 flex items-center justify-center gap-1">
@@ -406,7 +406,7 @@ export default function DemoPage() {
                             <div className="h-full flex flex-col items-center justify-center p-8 text-center space-y-6 animate-in fade-in duration-500">
                                 <div className="relative">
                                     <div className="w-20 h-20 rounded-full border-4 border-green-100 flex items-center justify-center">
-                                        <Loader2 className="w-10 h-10 text-green-600 animate-spin" />
+                                        <Loader2 className="w-10 h-10 text-[#839a1c] animate-spin" />
                                     </div>
                                     <div className="absolute inset-0 border-4 border-t-green-500 rounded-full animate-spin" />
                                 </div>
@@ -421,7 +421,7 @@ export default function DemoPage() {
                                 </div>
 
                                 <div className="w-full max-w-xs h-2 bg-neutral-100 rounded-full overflow-hidden">
-                                    <div className="h-full bg-green-500 animate-[progress_15s_ease-in-out_infinite] w-full origin-left" />
+                                    <div className="h-full bg-[#f5f7ed]0 animate-[progress_15s_ease-in-out_infinite] w-full origin-left" />
                                 </div>
                             </div>
                         )}

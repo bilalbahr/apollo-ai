@@ -4,9 +4,13 @@ import "./globals.css";
 import ErrorReporter from "@/components/ErrorReporter";
 import Script from "next/script";
 import { Toaster } from "@/components/ui/sonner";
-import { ChatProvider } from "@/components/ai-sidebar/ChatContext";
-import { ChatSidebar } from "@/components/ai-sidebar/ChatSidebar";
-import { Analytics } from "@vercel/analytics/next";
+import { Montserrat_Alternates } from "next/font/google";
+
+const montserratAlternates = Montserrat_Alternates({
+  weight: ['400', '600', '700', '800'],
+  subsets: ['latin'],
+  variable: '--font-montserrat-alternates',
+});
 
 // Placeholder for VisualEditsMessenger since code was not provided
 const VisualEditsMessenger = () => null;
@@ -23,25 +27,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased">
-        <ChatProvider>
-          <ErrorReporter />
-          <Script
-            src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/scripts//route-messenger.js"
-            strategy="afterInteractive"
-            data-target-origin="*"
-            data-message-type="ROUTE_CHANGE"
-            data-include-search-params="true"
-            data-only-in-iframe="true"
-            data-debug="true"
-            data-custom-data='{"appName": "YourApp", "version": "1.0.0", "greeting": "hi"}'
-          />
-          {children}
-          <Toaster />
-          <ChatSidebar />
-          <VisualEditsMessenger />
-          <Analytics />
-        </ChatProvider>
+      <body className={`antialiased ${montserratAlternates.variable}`} suppressHydrationWarning>
+        <ErrorReporter />
+        <Script
+          src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/scripts//route-messenger.js"
+          strategy="afterInteractive"
+          data-target-origin="*"
+          data-message-type="ROUTE_CHANGE"
+          data-include-search-params="true"
+          data-only-in-iframe="true"
+          data-debug="true"
+          data-custom-data='{"appName": "YourApp", "version": "1.0.0", "greeting": "hi"}'
+        />
+        {children}
+        <Toaster />
+        <VisualEditsMessenger />
       </body>
     </html>
   );

@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
   images: {
@@ -12,10 +13,9 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true, // For rapid development
   },
-  eslint: {
-    ignoreDuringBuilds: true, // Bypass linting for Vercel deployment
+  turbopack: {
+    root: path.resolve(__dirname),
   },
-
 };
 
 export default nextConfig;

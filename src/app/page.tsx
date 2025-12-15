@@ -1,11 +1,13 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, lazy, Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
-import { DroneScanner3D } from "@/components/DroneScanner3D";
 import { Badge } from "@/components/ui/badge";
+
+// Lazy load the 3D component for better initial load performance
+const DroneScanner3D = lazy(() => import("@/components/DroneScanner3D").then(mod => ({ default: mod.DroneScanner3D })));
 import {
   Leaf,
   Brain,
@@ -24,11 +26,12 @@ import {
   ArrowRight
 } from "lucide-react";
 
-import abrorImg from "./avatars/abror.png";
-import bilolImg from "./avatars/bilol.png";
-import husanImg from "./avatars/husan.png";
-import umarImg from "./avatars/umar.png";
-import shynbergenImg from "./avatars/shynbergen.png";
+import abrorImg from "./avatars/optimized/abror.webp";
+import bilolImg from "./avatars/optimized/bilol.webp";
+import husanImg from "./avatars/optimized/husan.webp";
+import umarImg from "./avatars/optimized/umar.webp";
+import shynbergenImg from "./avatars/optimized/shynbergen.webp";
+import hackathonImg from "../images/hackathon.jpg";
 
 const teamMembers = [
   {
@@ -98,7 +101,7 @@ const roadmapSteps = [
   { phase: "Phase 3", title: "Scale", status: "future", items: ["Drone integration", "Real-time monitoring", "API access"] }
 ];
 
-// Animated section wrapper
+// Animated section wrapper - optimized with will-change
 const AnimatedSection = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -110,6 +113,7 @@ const AnimatedSection = ({ children, className = "" }: { children: React.ReactNo
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
       className={className}
+      style={{ willChange: isInView ? 'auto' : 'opacity, transform' }}
     >
       {children}
     </motion.div>
@@ -139,24 +143,23 @@ export default function Home() {
         transition={{ delay: 0.2 }}
       >
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <Image
               src="/icon.svg"
               alt="Apollo AI Logo"
-              width={32}
-              height={32}
-              className="w-8 h-8 rounded-lg"
+              width={48}
+              height={48}
+              className="w-12 h-12 rounded-lg"
             />
-            <span className="font-bold text-lg">Apollo AI</span>
+            <span className="font-bold text-2xl logo-text">Apollo AI</span>
           </div>
           <div className="hidden md:flex items-center gap-6 text-sm">
-            <a href="#problem" className="hover:text-green-600 transition">Problem</a>
-            <a href="#solution" className="hover:text-green-600 transition">Solution</a>
-            <a href="#team" className="hover:text-green-600 transition">Team</a>
-            <a href="#tech" className="hover:text-green-600 transition">Tech</a>
-            <a href="/demo" className="hover:text-green-600 transition">Demo</a>
+            <a href="#problem" className="hover:text-[#839a1c] transition">Problem</a>
+            <a href="#solution" className="hover:text-[#839a1c] transition">Solution</a>
+            <a href="#team" className="hover:text-[#839a1c] transition">Team</a>
+            <a href="#tech" className="hover:text-[#839a1c] transition">Tech</a>
+            <a href="/demo" className="hover:text-[#839a1c] transition">Demo</a>
           </div>
-          <Badge variant="outline" className="text-green-600 border-green-600 bg-green-50/50">Stage 2</Badge>
         </div>
       </motion.nav>
 
@@ -165,7 +168,16 @@ export default function Home() {
         style={{ opacity: heroOpacity }}
         className="relative h-[90vh] md:h-screen w-full"
       >
-        <DroneScanner3D />
+        <Suspense fallback={
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-b from-sky-100 to-[#f5f7ed]">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#839a1c] mx-auto mb-4"></div>
+              <p className="text-gray-600">Loading 3D Scene...</p>
+            </div>
+          </div>
+        }>
+          <DroneScanner3D />
+        </Suspense>
       </motion.section>
 
       {/* Content Sections with Scroll Animations */}
@@ -189,7 +201,7 @@ export default function Home() {
               ].map((item, i) => (
                 <AnimatedSection key={i}>
                   <GlassCard className="p-6 text-center tech-border">
-                    <p className="text-4xl md:text-5xl font-bold text-green-600 mb-2">{item.stat}</p>
+                    <p className="text-4xl md:text-5xl font-bold text-[#839a1c] mb-2">{item.stat}</p>
                     <p className="text-muted-foreground">{item.label}</p>
                   </GlassCard>
                 </AnimatedSection>
@@ -215,7 +227,7 @@ export default function Home() {
                 <AnimatedSection key={i}>
                   <GlassCard className="p-8 text-center tech-border">
                     <motion.div
-                      className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center mx-auto mb-4 shadow-lg"
+                      className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#9bb320] to-[#839a1c] flex items-center justify-center mx-auto mb-4 shadow-lg"
                       whileHover={{ scale: 1.1, rotate: 5 }}
                     >
                       <step.icon className="h-8 w-8 text-white" />
@@ -242,7 +254,7 @@ export default function Home() {
                 <AnimatedSection key={i}>
                   <GlassCard className="p-6 text-center tech-border">
                     <motion.div
-                      className="w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-green-700 text-white flex items-center justify-center mx-auto mb-4 text-xl font-bold shadow-lg overflow-hidden"
+                      className="w-16 h-16 rounded-full bg-gradient-to-br from-[#839a1c] to-[#6b7d17] text-white flex items-center justify-center mx-auto mb-4 text-xl font-bold shadow-lg overflow-hidden"
                       whileHover={{ scale: 1.1 }}
                     >
                       <Image
@@ -257,7 +269,7 @@ export default function Home() {
                     <p className="text-sm text-muted-foreground mb-3">{member.role}</p>
                     <div className="flex flex-wrap gap-1 justify-center mb-4">
                       {member.skills.map((skill, j) => (
-                        <span key={j} className="px-2 py-0.5 bg-green-100/50 text-green-800 rounded-full text-xs">
+                        <span key={j} className="px-2 py-0.5 bg-[#eaedda]/50 text-[#566312] rounded-full text-xs">
                           {skill}
                         </span>
                       ))}
@@ -309,7 +321,7 @@ export default function Home() {
                 <AnimatedSection key={i}>
                   <GlassCard className="p-6 flex items-start gap-4 tech-border">
                     <motion.div
-                      className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shrink-0 shadow-lg"
+                      className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#9bb320] to-[#839a1c] flex items-center justify-center shrink-0 shadow-lg"
                       whileHover={{ rotate: 10 }}
                     >
                       <item.icon className="h-6 w-6 text-white" />
@@ -322,6 +334,78 @@ export default function Home() {
                 </AnimatedSection>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* Achievement/Hackathon Win */}
+        <section className="py-20 px-4">
+          <div className="max-w-6xl mx-auto">
+            <AnimatedSection className="text-center mb-12">
+              <Badge variant="outline" className="mb-4 bg-white/50">Achievement</Badge>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">AI500! Hackathon Winner</h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                Our team won the AI500! Hackathon organized by Agrobank, validating our innovative approach to AI-powered crop stress detection.
+              </p>
+            </AnimatedSection>
+
+            <AnimatedSection>
+              <GlassCard className="overflow-hidden tech-border" hover={false}>
+                <div className="grid md:grid-cols-2 gap-8 items-center">
+                  {/* Image */}
+                  <div className="relative h-[400px] md:h-[500px] overflow-hidden">
+                    <Image
+                      src={hackathonImg}
+                      alt="Apollo AI Team - AI500 Hackathon Winners"
+                      fill
+                      className="object-cover"
+                      priority
+                    />
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-8">
+                    <h3 className="text-2xl font-bold mb-4">Recognized Excellence in AgriTech Innovation</h3>
+                    <p className="text-muted-foreground mb-6">
+                      Apollo AI was awarded first place at the AI500 Hackathon hosted by Agrobank, competing against top teams in agricultural technology innovation.
+                    </p>
+
+                    <div className="space-y-4 mb-6">
+                      <div className="flex items-start gap-3">
+                        <CheckCircle2 className="h-5 w-5 text-[#839a1c] flex-shrink-0 mt-0.5" />
+                        <div>
+                          <p className="font-semibold">Grand Prize Winner</p>
+                          <p className="text-sm text-muted-foreground">Recognized for outstanding innovation in AI-powered agriculture</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <CheckCircle2 className="h-5 w-5 text-[#839a1c] flex-shrink-0 mt-0.5" />
+                        <div>
+                          <p className="font-semibold">Real-World Impact</p>
+                          <p className="text-sm text-muted-foreground">Solution addresses critical challenges in crop health monitoring</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <CheckCircle2 className="h-5 w-5 text-[#839a1c] flex-shrink-0 mt-0.5" />
+                        <div>
+                          <p className="font-semibold">Industry Validation</p>
+                          <p className="text-sm text-muted-foreground">Endorsed by agricultural and tech sector experts</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <a
+                      href="https://ai500.agrobank.uz/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-[#839a1c] hover:bg-[#6b7d17] text-white rounded-lg font-medium transition-colors"
+                    >
+                      Learn More About AI500
+                      <ArrowRight className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+              </GlassCard>
+            </AnimatedSection>
           </div>
         </section>
 
@@ -338,7 +422,7 @@ export default function Home() {
                 <AnimatedSection key={i}>
                   <GlassCard className="p-6 tech-border">
                     <motion.div whileHover={{ x: 5 }}>
-                      <tech.icon className="h-8 w-8 text-green-600 mb-3" />
+                      <tech.icon className="h-8 w-8 text-[#839a1c] mb-3" />
                     </motion.div>
                     <h3 className="font-semibold mb-2">{tech.title}</h3>
                     <p className="text-sm text-muted-foreground">{tech.desc}</p>
@@ -361,19 +445,19 @@ export default function Home() {
               {roadmapSteps.map((step, i) => (
                 <AnimatedSection key={i}>
                   <GlassCard
-                    className={`p-6 tech-border ${step.status === "current" ? "ring-2 ring-green-500 pulse-glow" : ""}`}
+                    className={`p-6 tech-border ${step.status === "current" ? "ring-2 ring-[#839a1c] pulse-glow" : ""}`}
                     hover={false}
                   >
                     <div className="flex items-center gap-3 mb-3">
                       <span className={`px-3 py-1 rounded-full text-sm font-medium ${step.status === "current"
-                        ? "bg-green-600 text-white"
+                        ? "bg-[#839a1c] text-white"
                         : "bg-gray-100 text-gray-600"
                         }`}>
                         {step.phase}
                       </span>
                       <h3 className="font-semibold text-lg">{step.title}</h3>
                       {step.status === "current" && (
-                        <span className="ml-auto px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs">
+                        <span className="ml-auto px-2 py-0.5 bg-[#eaedda] text-[#6b7d17] rounded text-xs">
                           Current
                         </span>
                       )}
@@ -381,7 +465,7 @@ export default function Home() {
                     <ul className="flex flex-wrap gap-2">
                       {step.items.map((item, j) => (
                         <li key={j} className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <CheckCircle2 className={`h-4 w-4 ${step.status === "current" ? "text-green-600" : ""}`} />
+                          <CheckCircle2 className={`h-4 w-4 ${step.status === "current" ? "text-[#839a1c]" : ""}`} />
                           {item}
                         </li>
                       ))}
@@ -407,11 +491,11 @@ export default function Home() {
             <div className="grid md:grid-cols-2 gap-8 mb-12">
               <AnimatedSection>
                 <Link href="/demo" className="block h-full">
-                  <GlassCard className="p-6 tech-border h-full group cursor-pointer hover:bg-green-50/50 transition-colors">
+                  <GlassCard className="p-6 tech-border h-full group cursor-pointer hover:bg-[#f5f7ed]/50 transition-colors">
                     <h3 className="font-semibold text-lg mb-2">1. Upload Interface</h3>
                     <p className="text-sm text-muted-foreground mb-4">Drag & drop or click to upload crop images</p>
-                    <div className="border-2 border-dashed border-green-300/50 rounded-lg p-8 text-center bg-white/30 group-hover:border-green-500 transition-colors">
-                      <Upload className="h-12 w-12 mx-auto text-green-500/70 mb-4 group-hover:scale-110 transition-transform" />
+                    <div className="border-2 border-dashed border-[#839a1c]/50 rounded-lg p-8 text-center bg-white/30 group-hover:border-[#839a1c] transition-colors">
+                      <Upload className="h-12 w-12 mx-auto text-[#839a1c]/70 mb-4 group-hover:scale-110 transition-transform" />
                       <p className="text-sm text-muted-foreground mb-2">Drag image here or click to browse</p>
                       <p className="text-xs text-muted-foreground">Supports: JPG, PNG, TIFF (max 10MB)</p>
                     </div>
@@ -423,12 +507,12 @@ export default function Home() {
                 <GlassCard className="p-6 tech-border h-full">
                   <h3 className="font-semibold text-lg mb-2">2. Analysis Output</h3>
                   <p className="text-sm text-muted-foreground mb-4">Stress/disease detection with severity levels</p>
-                  <div className="relative rounded-lg overflow-hidden bg-gradient-to-br from-green-400/80 via-yellow-400/80 to-red-400/80 aspect-video shadow-inner">
+                  <div className="relative rounded-lg overflow-hidden bg-gradient-to-br from-[#9bb320]/80 via-yellow-400/80 to-red-400/80 aspect-video shadow-inner">
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="glass-card rounded-lg p-4 text-center">
                         <p className="font-semibold mb-2">Disease Detection Output</p>
                         <div className="flex items-center gap-2 text-xs">
-                          <span className="w-4 h-4 bg-green-500 rounded shadow"></span> Healthy
+                          <span className="w-4 h-4 bg-[#f5f7ed]0 rounded shadow"></span> Healthy
                           <span className="w-4 h-4 bg-yellow-500 rounded shadow"></span> Stressed
                           <span className="w-4 h-4 bg-red-500 rounded shadow"></span> Diseased
                         </div>
@@ -441,7 +525,7 @@ export default function Home() {
 
             <div className="text-center mt-8">
               <Link href="/demo" className="inline-block">
-                <button className="group bg-green-600 hover:bg-green-700 text-white rounded-full px-8 h-12 text-lg font-semibold shadow-lg shadow-green-600/20 hover:scale-105 transition-all flex items-center justify-center mx-auto gap-3 cursor-pointer">
+                <button className="group bg-[#839a1c] hover:bg-[#6b7d17] text-white rounded-full px-8 h-12 text-lg font-semibold shadow-lg shadow-[#839a1c]/20 hover:scale-105 transition-all flex items-center justify-center mx-auto gap-3 cursor-pointer">
                   Try the Live Demo
                   <div className="w-6 h-6 flex items-center justify-center bg-white/20 rounded-full group-hover:bg-white/30 transition-colors">
                     <ArrowRight className="w-4 h-4 text-white" />
