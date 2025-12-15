@@ -6,6 +6,7 @@ import Script from "next/script";
 import { Toaster } from "@/components/ui/sonner";
 import { ChatProvider } from "@/components/ai-sidebar/ChatContext";
 import { ChatSidebar } from "@/components/ai-sidebar/ChatSidebar";
+import { Analytics } from "@vercel/analytics/next";
 
 // Placeholder for VisualEditsMessenger since code was not provided
 const VisualEditsMessenger = () => null;
@@ -39,6 +40,7 @@ export default function RootLayout({
           <Toaster />
           <ChatSidebar />
           <VisualEditsMessenger />
+          <Analytics />
         </ChatProvider>
       </body>
     </html>
