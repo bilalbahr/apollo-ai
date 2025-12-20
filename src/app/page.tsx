@@ -137,7 +137,7 @@ export default function Home() {
     <div ref={containerRef} className="relative">
       {/* Fixed Navigation - Glassy */}
       <motion.nav
-        className="fixed top-0 w-full z-50 glass-card border-b border-white/20"
+        className="fixed top-0 w-full z-50 glass-card"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ delay: 0.2 }}
@@ -357,6 +357,7 @@ export default function Home() {
                       src={hackathonImg}
                       alt="Apollo AI Team - AI500 Hackathon Winners"
                       fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
                       className="object-cover"
                       priority
                     />
@@ -537,25 +538,31 @@ export default function Home() {
         </section>
 
         {/* Footer */}
-        <footer className="py-8 px-4 border-t border-gray-200/50">
-          <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <Image
-                src="/icon.svg"
-                alt="Apollo AI Logo"
-                width={24}
-                height={24}
-                className="w-6 h-6 rounded-lg"
-              />
-              <span className="font-semibold">Apollo AI</span>
+        <footer className="py-12 px-4 border-t border-gray-200/50">
+          <div className="max-w-6xl mx-auto grid grid-cols-3 items-center gap-6">
+            {/* Left - Title */}
+            <div className="flex justify-start">
+              <span className="font-bold text-3xl logo-text text-[#839a1c]">Apollo AI</span>
             </div>
-            <p className="text-sm text-muted-foreground">Built for AI500 Hackathon 2025 • Stage 2 Submission</p>
-            <div className="flex gap-4">
+
+            {/* Center - Large Logo */}
+            <div className="flex justify-center">
+              <Image
+                src="/apollologo.png"
+                alt="Apollo AI Logo"
+                width={200}
+                height={200}
+                className="w-48 h-48 object-contain"
+              />
+            </div>
+
+            {/* Right - Social Media */}
+            <div className="flex gap-4 justify-end">
               <motion.div whileHover={{ scale: 1.2 }}>
-                <Github className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer" />
+                <Github className="h-5 w-5 text-[#839a1c] hover:text-[#6b7d17] cursor-pointer" />
               </motion.div>
               <motion.div whileHover={{ scale: 1.2 }}>
-                <Linkedin className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer" />
+                <Linkedin className="h-5 w-5 text-[#839a1c] hover:text-[#6b7d17] cursor-pointer" />
               </motion.div>
             </div>
           </div>
