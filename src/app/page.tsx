@@ -6,6 +6,7 @@ import Image from "next/image";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 
 const DroneScanner3D = lazy(() => import("@/components/DroneScanner3D").then(mod => ({ default: mod.DroneScanner3D })));
+import PointillismWord from "@/components/PointillismWord";
 import {
   Upload,
   Cpu,
@@ -355,12 +356,8 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Oversized wordmark */}
-          <div className="mt-14 md:mt-16 select-none">
-            <span className="font-display leading-[0.78] tracking-[-0.045em] text-[24vw] lg:text-[15rem] text-[var(--ink)]">
-              Apollo<span className="text-[var(--olive)]">.</span>
-            </span>
-          </div>
+          {/* Oversized pointillism wordmark */}
+          <PointillismWord text="Apollo" className="mt-14 md:mt-16 w-full" />
 
           {/* Meta row */}
           <div className="mt-6 flex flex-col sm:flex-row justify-between gap-3 text-sm text-muted-foreground">
