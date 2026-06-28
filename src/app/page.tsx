@@ -358,12 +358,6 @@ export default function Home() {
 
           {/* Oversized pointillism wordmark */}
           <PointillismWord text="Apollo" className="mt-14 md:mt-16 w-full" />
-
-          {/* Meta row */}
-          <div className="mt-6 flex flex-col sm:flex-row justify-between gap-3 text-sm text-muted-foreground">
-            <span>© 2025 Apollo</span>
-            <span>AI500 Hackathon · Agrobank</span>
-          </div>
         </div>
       </footer>
     </div>
