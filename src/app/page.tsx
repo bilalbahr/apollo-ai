@@ -14,6 +14,7 @@ import {
   Linkedin,
   ArrowUpRight,
   ArrowRight,
+  ArrowUp,
 } from "lucide-react";
 
 import hackathonImg from "../images/hackathon.jpg";
@@ -332,19 +333,40 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="max-w-6xl mx-auto px-6 py-16 flex flex-col sm:flex-row items-center justify-between gap-6">
-        <div className="flex items-center gap-2.5">
-          <Image src="/icon.svg" alt="Apollo" width={24} height={24} className="w-6 h-6" />
-          <span className="logo-text text-lg">Apollo</span>
-        </div>
-        <p className="text-sm text-muted-foreground order-last sm:order-none">AI500 Hackathon · 2025</p>
-        <div className="flex gap-4">
-          <a href="https://github.com/bilalsea2/apollo-ai" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-            <Github className="h-[18px] w-[18px] text-muted-foreground hover:text-foreground" strokeWidth={1.5} />
-          </a>
-          <a href="https://www.linkedin.com/in/bilalsea/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-            <Linkedin className="h-[18px] w-[18px] text-muted-foreground hover:text-foreground" strokeWidth={1.5} />
-          </a>
+      <footer className="bg-[var(--secondary)] overflow-hidden">
+        <div className="max-w-6xl mx-auto px-6 pt-20 md:pt-28 pb-10">
+          {/* Top row: nav + socials + back to top */}
+          <div className="flex flex-wrap items-center justify-between gap-6">
+            <nav className="flex gap-7 text-[15px] text-muted-foreground">
+              <a href="#approach" className="ulink">Approach</a>
+              <Link href="/field" className="ulink">Field</Link>
+              <Link href="/demo" className="ulink">Demo</Link>
+            </nav>
+            <div className="flex items-center gap-5">
+              <a href="https://github.com/bilalsea2/apollo-ai" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                <Github className="h-[18px] w-[18px] text-muted-foreground hover:text-foreground transition-colors" strokeWidth={1.5} />
+              </a>
+              <a href="https://www.linkedin.com/in/bilalsea/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                <Linkedin className="h-[18px] w-[18px] text-muted-foreground hover:text-foreground transition-colors" strokeWidth={1.5} />
+              </a>
+              <a href="#top" className="ml-2 inline-flex items-center gap-1.5 text-[15px] text-muted-foreground hover:text-foreground transition-colors">
+                Top <ArrowUp className="h-4 w-4" strokeWidth={1.5} />
+              </a>
+            </div>
+          </div>
+
+          {/* Oversized wordmark */}
+          <div className="mt-14 md:mt-16 select-none">
+            <span className="font-display leading-[0.78] tracking-[-0.045em] text-[24vw] lg:text-[15rem] text-[var(--ink)]">
+              Apollo<span className="text-[var(--olive)]">.</span>
+            </span>
+          </div>
+
+          {/* Meta row */}
+          <div className="mt-6 flex flex-col sm:flex-row justify-between gap-3 text-sm text-muted-foreground">
+            <span>© 2025 Apollo</span>
+            <span>AI500 Hackathon · Agrobank</span>
+          </div>
         </div>
       </footer>
     </div>

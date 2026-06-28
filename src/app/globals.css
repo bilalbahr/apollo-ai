@@ -160,33 +160,14 @@
   border-color: var(--hairline);
 }
 
-/* Animated underline for quiet text links */
+/* Quiet text link — color shift only, no underline */
 .ulink {
-  position: relative;
-  color: var(--ink);
+  color: inherit;
   transition: color 0.2s ease;
-}
-
-.ulink::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -2px;
-  height: 1px;
-  width: 100%;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .ulink:hover {
   color: var(--olive-deep);
-}
-
-.ulink:hover::after {
-  transform: scaleX(1);
-  transform-origin: left;
 }
 
 /* Flat surface to replace the old glass-card (kept name for compatibility) */
