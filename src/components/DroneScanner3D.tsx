@@ -24,11 +24,11 @@ const statusColors: Record<CropStatus, string> = {
 };
 
 const statusLabels: Record<CropStatus, string> = {
-    healthy: "✅ Healthy",
-    stressed: "🚨 High Stress",
-    moderate: "⚠️ Moderate",
-    "nutrient-deficient": "🧪 Nutrient Deficiency",
-    "water-stress": "💧 Water Stress",
+    healthy: "Healthy",
+    stressed: "High stress",
+    moderate: "Moderate",
+    "nutrient-deficient": "Nutrient deficiency",
+    "water-stress": "Water stress",
 };
 
 // Generate corn field data
@@ -355,70 +355,51 @@ const InfoPanel = ({ scannedCrops }: { scannedCrops: CropData[] }) => {
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="absolute top-24 left-0 right-0 mx-4 md:right-4 md:left-auto md:w-56 md:mx-0 rounded-xl tech-border z-30"
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="absolute top-24 left-0 right-0 mx-4 md:right-6 md:left-auto md:w-60 md:mx-0 rounded-lg z-30"
             style={{
-                background: "linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%)",
+                background: "rgba(248,245,238,0.86)",
                 backdropFilter: "blur(12px)",
-                border: "1px solid rgba(131, 154, 28, 0.3)",
-                boxShadow: "0 4px 24px rgba(0, 0, 0, 0.12)"
+                border: "1px solid rgba(27,28,23,0.12)",
+                boxShadow: "0 1px 2px rgba(27,28,23,0.05)",
             }}
         >
-            {/* Desktop Layout (Box) */}
-            <div className="hidden md:block p-3.5">
-                <div className="flex items-center gap-1.5 mb-2 pb-1.5 border-b border-gray-200/50">
-                    <span className="text-base">📡</span>
-                    <span className="font-bold text-[#6b7d17] text-sm">DRONE SCAN</span>
-                    <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[#839a1c] animate-pulse" />
+            {/* Desktop Layout */}
+            <div className="hidden md:block p-4">
+                <div className="flex items-center gap-2 mb-3 pb-3 border-b border-[rgba(27,28,23,0.1)]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#7e951c] animate-pulse" />
+                    <span className="text-xs text-[#5c5b51] tracking-wide">Drone scan</span>
+                    <span className="ml-auto font-mono text-[10px] text-[#5c5b51]">live</span>
                 </div>
 
-                <div className="space-y-1.5 text-sm">
-                    <div className="flex justify-between items-center">
-                        <span className="text-gray-700">Status:</span>
-                        <span className="font-semibold text-sm" style={{ color: statusColors[overallStatus] }}>
+                <div className="space-y-2.5 text-sm">
+                    <div className="flex justify-between items-baseline">
+                        <span className="text-[#5c5b51]">Status</span>
+                        <span className="font-medium" style={{ color: statusColors[overallStatus] }}>
                             {statusLabels[overallStatus]}
                         </span>
                     </div>
-
-                    <div className="flex justify-between">
-                        <span className="text-gray-700">Coverage:</span>
-                        <span className="font-medium text-gray-900">3m × 3m</span>
+                    <div className="flex justify-between items-baseline">
+                        <span className="text-[#5c5b51]">Coverage</span>
+                        <span className="font-mono text-[13px] text-[#1b1c17]">3 × 3 m</span>
+                    </div>
+                    <div className="flex justify-between items-baseline">
+                        <span className="text-[#5c5b51]">Crops</span>
+                        <span className="font-mono text-[13px] text-[#1b1c17]">{stats.total}</span>
                     </div>
 
-                    <div className="flex justify-between">
-                        <span className="text-gray-700">Crops:</span>
-                        <span className="font-medium text-gray-900">{stats.total}</span>
-                    </div>
-
-                    <div className="pt-1.5 border-t border-gray-200/50 space-y-0.5">
-                        {stats.healthy > 0 && (
-                            <div className="flex justify-between text-[#839a1c]">
-                                <span>✅ Healthy</span>
-                                <span className="font-medium">{stats.healthy}</span>
-                            </div>
-                        )}
-                        {stats.moderate > 0 && (
-                            <div className="flex justify-between text-yellow-600">
-                                <span>⚠️ Moderate</span>
-                                <span className="font-medium">{stats.moderate}</span>
-                            </div>
-                        )}
-                        {stats.stressed > 0 && (
-                            <div className="flex justify-between text-red-500">
-                                <span>🚨 Stressed</span>
-                                <span className="font-medium">{stats.stressed}</span>
-                            </div>
-                        )}
-                    </div>
-
-                    <div className="pt-1.5 border-t border-gray-200/50">
-                        <div className="text-xs text-gray-700 mb-1">AI Confidence</div>
-                        <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                    <div className="pt-3 border-t border-[rgba(27,28,23,0.1)]">
+                        <div className="flex justify-between text-xs text-[#5c5b51] mb-1.5">
+                            <span>Confidence</span>
+                            <span className="font-mono">{stats.total > 0 ? `${85 + Math.min(stats.total, 14)}%` : "—"}</span>
+                        </div>
+                        <div className="h-1 bg-[rgba(27,28,23,0.1)] rounded-full overflow-hidden">
                             <motion.div
-                                className="h-full bg-gradient-to-r from-[#9bb320] to-[#839a1c]"
+                                className="h-full bg-[#7e951c]"
                                 initial={{ width: 0 }}
-                                animate={{ width: stats.total > 0 ? `${85 + Math.min(stats.total, 15)}%` : "0%" }}
+                                animate={{ width: stats.total > 0 ? `${85 + Math.min(stats.total, 14)}%` : "0%" }}
                                 transition={{ duration: 0.5, ease: "easeOut" }}
                             />
                         </div>
@@ -427,23 +408,17 @@ const InfoPanel = ({ scannedCrops }: { scannedCrops: CropData[] }) => {
             </div>
 
             {/* Mobile Layout (Horizontal Bar) */}
-            <div className="md:hidden flex items-center justify-between px-4 py-2 text-xs">
+            <div className="md:hidden flex items-center justify-between px-4 py-2.5 text-xs">
                 <div className="flex items-center gap-2">
-                    <span className="text-sm">📡</span>
-                    <span className="font-bold text-[#6b7d17]">SCANNING</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#7e951c] animate-pulse" />
+                    <span className="text-[#5c5b51]">Scanning</span>
                 </div>
-
-                <div className="h-4 w-px bg-gray-300 mx-2" />
-
-                <div className="flex items-center gap-1 font-semibold" style={{ color: statusColors[overallStatus] }}>
-                    {overallStatus === 'healthy' ? '✅' : overallStatus === 'stressed' ? '🚨' : '⚠️'} {statusLabels[overallStatus].split(' ').pop()}
+                <div className="font-medium" style={{ color: statusColors[overallStatus] }}>
+                    {statusLabels[overallStatus]}
                 </div>
-
-                <div className="h-4 w-px bg-gray-300 mx-2" />
-
-                <div className="flex items-center gap-1">
-                    <span className="text-gray-600">Crops:</span>
-                    <span className="font-medium">{stats.total}</span>
+                <div className="flex items-center gap-1.5">
+                    <span className="text-[#5c5b51]">Crops</span>
+                    <span className="font-mono text-[#1b1c17]">{stats.total}</span>
                 </div>
             </div>
         </motion.div>
@@ -462,11 +437,11 @@ export const DroneScanner3D = () => {
 
     return (
         <div className="relative w-full h-full dotted-bg">
-            {/* Sky gradient overlay */}
+            {/* Sky / paper wash — warm, subtle, fades to the page background */}
             <div
                 className="absolute inset-0 pointer-events-none z-10"
                 style={{
-                    background: "linear-gradient(180deg, rgba(135, 206, 235, 0.3) 0%, rgba(135, 206, 235, 0.1) 40%, transparent 70%)",
+                    background: "linear-gradient(180deg, rgba(170,194,150,0.18) 0%, rgba(243,239,230,0) 38%, rgba(243,239,230,0.0) 70%, rgba(243,239,230,0.85) 100%)",
                 }}
             />
 
@@ -485,90 +460,52 @@ export const DroneScanner3D = () => {
             {/* Info Panel */}
             <InfoPanel scannedCrops={scannedCrops} />
 
-            {/* Hero overlay - Desktop/Tablet version */}
-            <div className="hidden md:block absolute bottom-20 left-1/2 -translate-x-1/2 z-20 w-full max-w-2xl px-4">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                    className="rounded-xl px-6 py-3 flex items-center justify-between gap-4"
-                    style={{
-                        background: "linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.75) 100%)",
-                        backdropFilter: "blur(12px)",
-                        border: "1px solid rgba(131, 154, 28, 0.3)",
-                        boxShadow: "0 4px 24px rgba(0, 0, 0, 0.12)"
-                    }}
-                >
-                    <div className="flex items-center gap-3 flex-shrink-0">
-                        <h1 className="text-lg font-bold tracking-tight whitespace-nowrap">
-                            <span className="text-gray-900">AI-Powered</span>{" "}
-                            <span className="text-[#839a1c]">Crop Stress</span>{" "}
-                            <span className="text-gray-900">Detection</span>
-                        </h1>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                        <p className="text-sm text-gray-700 whitespace-nowrap">
-                            Move cursor to fly drone
-                        </p>
-                        <button className="px-4 py-2 bg-[#839a1c] hover:bg-[#6b7d17] text-white rounded-lg text-sm font-medium transition-colors whitespace-nowrap flex-shrink-0">
-                            Scan Crops
-                        </button>
-                    </div>
-                </motion.div>
+            {/* Hero headline — bottom-left, editorial */}
+            <div className="absolute bottom-16 md:bottom-24 left-0 z-20 w-full px-6 md:px-10 pointer-events-none">
+                <div className="max-w-6xl mx-auto">
+                    <motion.h1
+                        initial={{ opacity: 0, y: 24 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4, duration: 0.8, ease: [0.21, 0.5, 0.27, 1] }}
+                        className="font-display text-[2.6rem] sm:text-6xl md:text-7xl leading-[0.98] tracking-[-0.03em] text-[#1b1c17] max-w-3xl"
+                    >
+                        Find crop stress<br />
+                        <span className="italic text-[#5d6f14]">before the eye can.</span>
+                    </motion.h1>
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.9, duration: 0.6 }}
+                        className="mt-5 text-sm text-[#5c5b51]"
+                    >
+                        Move your cursor to fly the drone.
+                    </motion.p>
+                </div>
             </div>
 
-            {/* Drone Control Toggle - Bottom Left */}
+            {/* Drone control toggle — bottom right, quiet */}
             <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 1 }}
-                className="absolute bottom-8 left-8 z-30"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.1 }}
+                className="absolute bottom-8 right-6 z-30"
             >
                 <button
                     onClick={() => setMouseControlEnabled(!mouseControlEnabled)}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all shadow-lg ${
-                        mouseControlEnabled
-                            ? "bg-[#839a1c] text-white hover:bg-[#6b7d17]"
-                            : "bg-white/90 text-gray-700 hover:bg-white border border-gray-200"
-                    }`}
+                    className="flex items-center gap-2 px-3.5 py-2 rounded-full text-xs transition-colors"
                     style={{
+                        background: "rgba(248,245,238,0.86)",
                         backdropFilter: "blur(12px)",
+                        border: "1px solid rgba(27,28,23,0.12)",
+                        color: "#1b1c17",
                     }}
                 >
-                    <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
-                        {mouseControlEnabled ? (
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
-                            />
-                        ) : (
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                            />
-                        )}
-                    </svg>
-                    <span>{mouseControlEnabled ? "Drone Control ON" : "Drone Control OFF"}</span>
+                    <span
+                        className="w-1.5 h-1.5 rounded-full"
+                        style={{ background: mouseControlEnabled ? "#7e951c" : "rgba(27,28,23,0.3)" }}
+                    />
+                    {mouseControlEnabled ? "Drone control on" : "Scroll mode"}
                 </button>
-                {!mouseControlEnabled && (
-                    <motion.p
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-xs text-gray-600 mt-2 ml-1"
-                    >
-                        Page scrolling enabled
-                    </motion.p>
-                )}
             </motion.div>
 
             {/* Scroll indicator */}
@@ -576,11 +513,11 @@ export const DroneScanner3D = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.5 }}
-                className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 text-center"
+                className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 hidden md:block"
             >
                 <div className="bounce-down">
-                    <svg className="w-6 h-6 mx-auto text-[#839a1c]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                    <svg className="w-5 h-5 mx-auto text-[#5c5b51]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                     </svg>
                 </div>
             </motion.div>

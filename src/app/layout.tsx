@@ -4,20 +4,36 @@ import "./globals.css";
 import ErrorReporter from "@/components/ErrorReporter";
 import Script from "next/script";
 import { Toaster } from "@/components/ui/sonner";
-import { Montserrat_Alternates } from "next/font/google";
+import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 
-const montserratAlternates = Montserrat_Alternates({
-  weight: ['400', '600', '700', '800'],
+const fraunces = Fraunces({
   subsets: ['latin'],
-  variable: '--font-montserrat-alternates',
+  weight: ['400', '500', '600', '700'],
+  style: ['normal', 'italic'],
+  variable: '--font-display',
+  display: 'swap',
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-sans',
+  display: 'swap',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-mono',
+  display: 'swap',
 });
 
 // Placeholder for VisualEditsMessenger since code was not provided
 const VisualEditsMessenger = () => null;
 
 export const metadata: Metadata = {
-  title: "Apollo AI | Intelligent Crop Stress Detection",
-  description: "AI-powered crop stress detection using advanced vegetation indices and deep learning for precision agriculture",
+  title: "Apollo — Crop stress detection",
+  description: "Find crop stress before the eye can. AI-powered leaf and field diagnostics for precision agriculture.",
 };
 
 export default function RootLayout({
@@ -27,7 +43,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased ${montserratAlternates.variable}`} suppressHydrationWarning>
+      <body className={`antialiased font-sans ${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
         <ErrorReporter />
         <Script
           src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/scripts//route-messenger.js"
