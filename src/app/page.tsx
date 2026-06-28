@@ -226,12 +226,28 @@ export default function Home() {
           <h2 className="font-display text-4xl md:text-6xl tracking-[-0.02em]">How it works</h2>
           <p className="mt-4 text-lg text-muted-foreground">Three steps, a few seconds.</p>
         </Reveal>
-        <div className="mt-20 grid md:grid-cols-3 gap-14 md:gap-16">
+        <div className="mt-16 grid md:grid-cols-3 gap-6">
           {steps.map((step, i) => (
-            <Reveal key={i} delay={i * 0.08}>
-              <step.icon className="w-8 h-8 text-[var(--olive)]" strokeWidth={1.25} />
-              <h3 className="font-display text-3xl tracking-[-0.01em] mt-6">{step.title}</h3>
-              <p className="mt-2.5 text-muted-foreground leading-relaxed">{step.note}</p>
+            <Reveal key={i} delay={i * 0.1}>
+              <div className="group relative h-full overflow-hidden rounded-3xl bg-card p-8 md:p-10 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_28px_60px_-28px_rgba(27,28,23,0.3)]">
+                {/* Large editorial step numeral */}
+                <span
+                  className="pointer-events-none absolute -top-3 right-5 font-display leading-none select-none"
+                  style={{ fontSize: "7rem", color: "rgba(126,149,28,0.12)" }}
+                >
+                  {i + 1}
+                </span>
+
+                <div
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center text-[var(--olive-deep)] transition-transform duration-300 group-hover:scale-105"
+                  style={{ background: "rgba(126,149,28,0.12)" }}
+                >
+                  <step.icon className="w-7 h-7" strokeWidth={1.5} />
+                </div>
+
+                <h3 className="font-display text-3xl tracking-[-0.01em] mt-10">{step.title}</h3>
+                <p className="mt-3 text-muted-foreground leading-relaxed">{step.note}</p>
+              </div>
             </Reveal>
           ))}
         </div>
