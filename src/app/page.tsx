@@ -21,7 +21,6 @@ import abrorImg from "./avatars/optimized/abror.webp";
 import bilolImg from "./avatars/optimized/bilol.webp";
 import husanImg from "./avatars/optimized/husan.webp";
 import umarImg from "./avatars/optimized/umar.webp";
-import shynbergenImg from "./avatars/optimized/shynbergen.webp";
 import hackathonImg from "../images/hackathon.jpg";
 
 const teamMembers = [
@@ -63,14 +62,6 @@ const teamMembers = [
       github: "https://github.com/UmarbekFU",
       twitter: "https://x.com/umarHQ",
       linkedin: "https://20th.uz",
-    },
-  },
-  {
-    name: "Shynbergen Khojanbergenov",
-    role: "Designer",
-    avatar: shynbergenImg,
-    links: {
-      linkedin: "https://www.linkedin.com/in/shynbergen/",
     },
   },
 ];
@@ -288,9 +279,9 @@ export default function Home() {
       {/* Team */}
       <section id="team" className="max-w-6xl mx-auto px-6 py-32 md:py-44">
         <Reveal>
-          <h2 className="font-display text-4xl md:text-6xl tracking-[-0.02em]">Built by five.</h2>
+          <h2 className="font-display text-4xl md:text-6xl tracking-[-0.02em]">Built by four.</h2>
         </Reveal>
-        <div className="mt-20 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-10 gap-y-14">
+        <div className="mt-20 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-10 gap-y-14">
           {teamMembers.map((m, i) => (
             <Reveal key={i} delay={i * 0.06}>
               <div className="group">
