@@ -12,59 +12,11 @@ import {
   Activity,
   Github,
   Linkedin,
-  Twitter,
   ArrowUpRight,
   ArrowRight,
 } from "lucide-react";
 
-import abrorImg from "./avatars/optimized/abror.webp";
-import bilolImg from "./avatars/optimized/bilol.webp";
-import husanImg from "./avatars/optimized/husan.webp";
-import umarImg from "./avatars/optimized/umar.webp";
 import hackathonImg from "../images/hackathon.jpg";
-
-const teamMembers = [
-  {
-    name: "Abrorbek Nematov",
-    role: "Software Engineer",
-    avatar: abrorImg,
-    links: {
-      github: "https://github.com/ha-wq",
-      twitter: "https://x.com/AbrorbekNemat0v",
-      linkedin: "https://www.linkedin.com/in/abrorbek-nematov-2103272a5/",
-    },
-  },
-  {
-    name: "Bilol Bakhrillaev",
-    role: "ML Engineer",
-    avatar: bilolImg,
-    links: {
-      github: "https://github.com/bilalsea2",
-      twitter: "https://x.com/bilalsbahr",
-      linkedin: "https://www.linkedin.com/in/bilalsea/",
-    },
-  },
-  {
-    name: "Husan Isomiddinov",
-    role: "Product",
-    avatar: husanImg,
-    links: {
-      github: "https://github.com/husanisomiddinov/",
-      twitter: "https://x.com/HusanIsamiddin",
-      linkedin: "https://www.linkedin.com/in/husanisomiddinov/",
-    },
-  },
-  {
-    name: "Umarbek Umarov",
-    role: "Software Engineer",
-    avatar: umarImg,
-    links: {
-      github: "https://github.com/UmarbekFU",
-      twitter: "https://x.com/umarHQ",
-      linkedin: "https://20th.uz",
-    },
-  },
-];
 
 const stats = [
   { value: "40%", label: "of global crops lost to pests & disease each year" },
@@ -173,7 +125,6 @@ export default function Home() {
           </a>
           <div className="hidden md:flex items-center gap-9 text-[15px] text-muted-foreground">
             <a href="#approach" className="ulink">Approach</a>
-            <a href="#team" className="ulink">Team</a>
             <Link href="/field" className="ulink">Field</Link>
             <Link
               href="/demo"
@@ -309,49 +260,6 @@ export default function Home() {
             About AI500 <ArrowUpRight className="w-4 h-4" />
           </a>
         </Reveal>
-      </section>
-
-      {/* Team */}
-      <section id="team" className="max-w-6xl mx-auto px-6 py-32 md:py-44">
-        <Reveal>
-          <h2 className="font-display text-4xl md:text-6xl tracking-[-0.02em]">Built by four.</h2>
-        </Reveal>
-        <div className="mt-20 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-10 gap-y-14">
-          {teamMembers.map((m, i) => (
-            <Reveal key={i} delay={i * 0.06}>
-              <div className="group">
-                <div className="w-20 h-20 rounded-full overflow-hidden mb-5">
-                  <Image
-                    src={m.avatar}
-                    alt={m.name}
-                    width={80}
-                    height={80}
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-                  />
-                </div>
-                <h3 className="font-display text-xl leading-tight tracking-[-0.01em]">{m.name}</h3>
-                <p className="text-sm text-muted-foreground mt-1.5">{m.role}</p>
-                <div className="flex gap-3.5 mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  {m.links.github && (
-                    <a href={m.links.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                      <Github className="h-[18px] w-[18px] text-muted-foreground hover:text-foreground" strokeWidth={1.5} />
-                    </a>
-                  )}
-                  {m.links.linkedin && (
-                    <a href={m.links.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                      <Linkedin className="h-[18px] w-[18px] text-muted-foreground hover:text-foreground" strokeWidth={1.5} />
-                    </a>
-                  )}
-                  {m.links.twitter && (
-                    <a href={m.links.twitter} target="_blank" rel="noopener noreferrer" aria-label="X">
-                      <Twitter className="h-[18px] w-[18px] text-muted-foreground hover:text-foreground" strokeWidth={1.5} />
-                    </a>
-                  )}
-                </div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
       </section>
 
       {/* Stack + Roadmap */}
