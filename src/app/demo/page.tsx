@@ -254,11 +254,10 @@ export default function DemoPage() {
 
             <main className="pt-28 pb-24 px-6 max-w-5xl mx-auto">
                 <header className="max-w-2xl">
-                    <span className="eyebrow">Live demo</span>
-                    <h1 className="font-display text-4xl md:text-5xl tracking-[-0.02em] mt-5 leading-[1.05]">
+                    <h1 className="font-display text-5xl md:text-6xl tracking-[-0.02em] leading-[1.02]">
                         Read a leaf.
                     </h1>
-                    <p className="mt-4 text-muted-foreground leading-relaxed">
+                    <p className="mt-5 text-lg text-muted-foreground leading-relaxed">
                         Upload a crop-leaf image. The model returns a condition, a confidence score, and the top probabilities.
                     </p>
                 </header>
@@ -274,9 +273,9 @@ export default function DemoPage() {
                         ></iframe>
                     </div>
 
-                    <div className="space-y-5 text-sm leading-relaxed">
-                        <div className="border-t border-[var(--hairline)] pt-4">
-                            <h2 className="font-display text-xl tracking-[-0.01em] mb-3">How it's built</h2>
+                    <div className="space-y-5 leading-relaxed">
+                        <div>
+                            <h2 className="font-display text-2xl tracking-[-0.01em] mb-3">How it's built</h2>
                             <p className="text-muted-foreground">
                                 Trained on the <span className="text-foreground">ResNet-18</span> architecture over the
                                 {" "}<span className="text-foreground">PlantVillage</span> dataset — 70k+ images across 38 leaf conditions.
@@ -290,7 +289,7 @@ export default function DemoPage() {
                     </div>
                 </div>
 
-                <div className="mt-16 grid md:grid-cols-2 gap-10 items-start border-t border-[var(--hairline)] pt-16">
+                <div className="mt-24 grid md:grid-cols-2 gap-10 items-start">
                     {/* Upload Section */}
                     <div className="space-y-5">
                         <div
