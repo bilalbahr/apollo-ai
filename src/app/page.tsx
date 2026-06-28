@@ -106,10 +106,55 @@ const Reveal = ({ children, className = "", delay = 0 }: { children: React.React
   );
 };
 
+const TimelineStep = ({
+  step,
+  index,
+}: {
+  step: { icon: typeof Upload; title: string; note: string };
+  index: number;
+}) => {
+  const ref = useRef(null);
+  const inView = useInView(ref, { margin: "-45% 0px -45% 0px" });
+  const Icon = step.icon;
+
+  return (
+    <div ref={ref} className="relative pl-24 md:pl-32 min-h-[6rem]">
+      {/* Node sitting on the spine */}
+      <motion.div
+        className="absolute left-0 top-0 w-16 h-16 md:w-[68px] md:h-[68px] rounded-2xl flex items-center justify-center z-10"
+        animate={{ backgroundColor: inView ? "#7e951c" : "#e7ead4" }}
+        transition={{ duration: 0.45, ease: "easeOut" }}
+      >
+        <motion.div animate={{ color: inView ? "#f3efe6" : "#5d6f14" }} transition={{ duration: 0.45 }}>
+          <Icon className="w-7 h-7" strokeWidth={1.5} />
+        </motion.div>
+      </motion.div>
+
+      <motion.div
+        animate={{ opacity: inView ? 1 : 0.45, y: inView ? 0 : 8 }}
+        transition={{ duration: 0.5, ease: [0.21, 0.5, 0.27, 1] }}
+        className="relative pt-1"
+      >
+        <span
+          className="pointer-events-none absolute -top-7 right-0 md:right-6 font-display leading-none select-none"
+          style={{ fontSize: "5.5rem", color: "rgba(126,149,28,0.1)" }}
+        >
+          {index + 1}
+        </span>
+        <h3 className="font-display text-3xl md:text-4xl tracking-[-0.01em]">{step.title}</h3>
+        <p className="mt-3 text-lg text-muted-foreground leading-relaxed max-w-md">{step.note}</p>
+      </motion.div>
+    </div>
+  );
+};
+
 export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end end"] });
   const hintOpacity = useTransform(scrollYProgress, [0, 0.08], [1, 0]);
+
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: lineProgress } = useScroll({ target: timelineRef, offset: ["start 0.55", "end 0.65"] });
 
   return (
     <div className="relative bg-background text-foreground">
@@ -211,36 +256,26 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Approach */}
+      {/* Approach — vertical scroll-driven timeline */}
       <section id="approach" className="max-w-6xl mx-auto px-6 py-32 md:py-44">
         <Reveal>
           <h2 className="font-display text-4xl md:text-6xl tracking-[-0.02em]">How it works</h2>
           <p className="mt-4 text-lg text-muted-foreground">Three steps, a few seconds.</p>
         </Reveal>
-        <div className="mt-16 grid md:grid-cols-3 gap-6">
-          {steps.map((step, i) => (
-            <Reveal key={i} delay={i * 0.1}>
-              <div className="group relative h-full overflow-hidden rounded-3xl bg-card p-8 md:p-10 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_28px_60px_-28px_rgba(27,28,23,0.3)]">
-                {/* Large editorial step numeral */}
-                <span
-                  className="pointer-events-none absolute -top-3 right-5 font-display leading-none select-none"
-                  style={{ fontSize: "7rem", color: "rgba(126,149,28,0.12)" }}
-                >
-                  {i + 1}
-                </span>
 
-                <div
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center text-[var(--olive-deep)] transition-transform duration-300 group-hover:scale-105"
-                  style={{ background: "rgba(126,149,28,0.12)" }}
-                >
-                  <step.icon className="w-7 h-7" strokeWidth={1.5} />
-                </div>
+        <div ref={timelineRef} className="relative mt-20 max-w-3xl">
+          {/* Spine: faint track + olive progress that fills as you scroll */}
+          <div className="absolute left-8 md:left-[34px] top-4 bottom-16 w-[2px] -translate-x-1/2 bg-[var(--hairline)]" />
+          <motion.div
+            style={{ scaleY: lineProgress }}
+            className="absolute left-8 md:left-[34px] top-4 bottom-16 w-[2px] -translate-x-1/2 bg-[var(--olive)] origin-top"
+          />
 
-                <h3 className="font-display text-3xl tracking-[-0.01em] mt-10">{step.title}</h3>
-                <p className="mt-3 text-muted-foreground leading-relaxed">{step.note}</p>
-              </div>
-            </Reveal>
-          ))}
+          <div className="space-y-20 md:space-y-28">
+            {steps.map((step, i) => (
+              <TimelineStep key={i} step={step} index={i} />
+            ))}
+          </div>
         </div>
       </section>
 
