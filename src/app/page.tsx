@@ -296,49 +296,39 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Demo CTA — graded field photograph */}
-      <section id="demo" className="relative overflow-hidden">
-        {/* Photo */}
-        <Image
-          src="/cta-field.jpg"
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover object-center"
-          priority
-        />
-        {/* Olive grade — multiplies the photo toward the brand green */}
-        <div className="absolute inset-0 mix-blend-multiply" style={{ background: "rgba(58,68,28,0.55)" }} />
-        {/* Contrast + edge blend into the paper page above and below */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(180deg, #f3efe6 0%, rgba(22,26,14,0.5) 26%, rgba(18,21,12,0.72) 54%, rgba(18,21,12,0.6) 76%, #f3efe6 100%)",
-          }}
-        />
-        {/* Soft center darkening so the type always has a bed */}
-        <div
-          className="absolute inset-0"
-          style={{ background: "radial-gradient(60% 60% at 50% 50%, rgba(12,14,8,0.45) 0%, rgba(12,14,8,0) 70%)" }}
-        />
+      {/* Demo CTA — contained, green-graded field photo card */}
+      <section id="demo" className="max-w-6xl mx-auto px-6 py-32 md:py-44">
+        <Reveal>
+          <div className="relative overflow-hidden rounded-3xl">
+            {/* Photo */}
+            <Image
+              src="/cta-field.jpg"
+              alt=""
+              fill
+              sizes="(max-width: 1152px) 100vw, 1152px"
+              className="object-cover object-center"
+              priority
+            />
+            {/* Even green duotone grade — unifies the photo into the brand */}
+            <div className="absolute inset-0 mix-blend-multiply" style={{ background: "#46541f" }} />
+            <div className="absolute inset-0" style={{ background: "rgba(20,24,12,0.5)" }} />
 
-        <div className="relative z-10 max-w-6xl mx-auto px-6 py-36 md:py-52 text-center">
-          <Reveal>
-            <h2 className="font-display text-5xl md:text-7xl tracking-[-0.03em] leading-[1.02] text-[var(--paper)] drop-shadow-[0_2px_24px_rgba(0,0,0,0.35)]">
-              See it read a leaf.
-            </h2>
-            <Link
-              href="/demo"
-              className="group mt-12 inline-flex items-center gap-3 bg-[var(--paper)] text-[var(--ink)] rounded-full pl-8 pr-3 py-3.5 text-lg hover:bg-white transition-colors shadow-[0_12px_40px_-12px_rgba(0,0,0,0.5)]"
-            >
-              Open the demo
-              <span className="w-9 h-9 rounded-full bg-[var(--ink)]/10 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
-                <ArrowRight className="w-4 h-4" />
-              </span>
-            </Link>
-          </Reveal>
-        </div>
+            <div className="relative z-10 px-6 py-28 md:py-40 text-center">
+              <h2 className="font-display text-5xl md:text-7xl tracking-[-0.03em] leading-[1.02] text-[var(--paper)]">
+                See it read a leaf.
+              </h2>
+              <Link
+                href="/demo"
+                className="group mt-12 inline-flex items-center gap-3 bg-[var(--paper)] text-[var(--ink)] rounded-full pl-8 pr-3 py-3.5 text-lg hover:bg-white transition-colors"
+              >
+                Open the demo
+                <span className="w-9 h-9 rounded-full bg-[var(--ink)]/10 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
+                  <ArrowRight className="w-4 h-4" />
+                </span>
+              </Link>
+            </div>
+          </div>
+        </Reveal>
       </section>
 
       {/* Footer */}
