@@ -238,7 +238,7 @@ export default function DemoPage() {
     return (
         <div className="min-h-screen bg-background text-foreground">
             {/* Navigation */}
-            <nav className="fixed top-0 w-full z-50 rule-b backdrop-blur-md" style={{ background: "rgba(243,239,230,0.72)" }}>
+            <nav className="fixed top-0 w-full z-50 backdrop-blur-md" style={{ background: "rgba(243,239,230,0.72)" }}>
                 <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-2 group text-sm text-muted-foreground hover:text-foreground transition-colors">
                         <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
