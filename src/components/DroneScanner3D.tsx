@@ -69,11 +69,39 @@ const generateCornField = (): CropData[] => {
     return crops;
 };
 
-// Minimal sprout: slim stem, soft tip, two small drooping blades
+// Long blade leaf, attached at the stem and arching outward then drooping.
+// A two-segment plane fakes the curve of a real corn leaf.
+const Leaf = ({ y, yaw, len, width, droop, color }: { y: number; yaw: number; len: number; width: number; droop: number; color: string }) => (
+    <group position={[0, y, 0]} rotation={[0, yaw, 0]}>
+        {/* base half — rises slightly off the stem */}
+        <group rotation={[0, 0, 0.25]}>
+            <mesh position={[len * 0.25, 0, 0]} castShadow>
+                <planeGeometry args={[len * 0.5, width]} />
+                <meshStandardMaterial color={color} side={THREE.DoubleSide} roughness={0.72} />
+            </mesh>
+            {/* tip half — droops down */}
+            <group position={[len * 0.5, 0, 0]} rotation={[0, 0, -droop]}>
+                <mesh position={[len * 0.25, 0, 0]} castShadow>
+                    <planeGeometry args={[len * 0.5, width * 0.7]} />
+                    <meshStandardMaterial color={color} side={THREE.DoubleSide} roughness={0.72} />
+                </mesh>
+            </group>
+        </group>
+    </group>
+);
+
+// Corn-like crop: upright stem, broad arching leaves, slim tassel on top
+const LEAF_LAYOUT = [
+    { y: 0.30, yaw: 0.4, len: 0.62, width: 0.15, droop: 0.7 },
+    { y: 0.44, yaw: 0.4 + Math.PI, len: 0.66, width: 0.16, droop: 0.8 },
+    { y: 0.58, yaw: 0.4 + Math.PI * 0.5, len: 0.56, width: 0.14, droop: 0.9 },
+    { y: 0.70, yaw: 0.4 + Math.PI * 1.5, len: 0.5, width: 0.12, droop: 1.0 },
+];
+
 const CornStalk = ({ position, status, scale, rotation, interactive }: CropData & { interactive: boolean }) => {
     const [hovered, setHovered] = useState(false);
     const leaf = leafColors[status];
-    const stem = "#6f8a2c";
+    const stem = status === "healthy" ? "#6f8a2c" : status === "stressed" ? "#8a7b3a" : "#7c8a34";
 
     return (
         <group
@@ -83,20 +111,22 @@ const CornStalk = ({ position, status, scale, rotation, interactive }: CropData 
             onPointerOver={interactive ? () => setHovered(true) : undefined}
             onPointerOut={interactive ? () => setHovered(false) : undefined}
         >
-            <mesh position={[0, 0.42, 0]} castShadow>
-                <cylinderGeometry args={[0.022, 0.04, 0.84, 6]} />
+            {/* stem */}
+            <mesh position={[0, 0.5, 0]} castShadow>
+                <cylinderGeometry args={[0.018, 0.045, 1.0, 6]} />
                 <meshStandardMaterial color={stem} roughness={0.85} />
             </mesh>
-            <mesh position={[0, 0.9, 0]} castShadow>
-                <coneGeometry args={[0.07, 0.26, 6]} />
+
+            {/* leaves */}
+            {LEAF_LAYOUT.map((l, i) => (
+                <Leaf key={i} {...l} color={leaf} />
+            ))}
+
+            {/* tassel */}
+            <mesh position={[0, 1.06, 0]} castShadow>
+                <cylinderGeometry args={[0.002, 0.016, 0.22, 5]} />
                 <meshStandardMaterial color={leaf} roughness={0.7} />
             </mesh>
-            {[0, 1].map((i) => (
-                <mesh key={i} position={[0, 0.38 + i * 0.22, 0]} rotation={[0.95, i * 2.4, 0]}>
-                    <planeGeometry args={[0.3, 0.07]} />
-                    <meshStandardMaterial color={leaf} side={THREE.DoubleSide} roughness={0.75} />
-                </mesh>
-            ))}
         </group>
     );
 };
