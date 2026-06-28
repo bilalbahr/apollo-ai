@@ -118,9 +118,7 @@ const Reveal = ({ children, className = "", delay = 0 }: { children: React.React
 export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end end"] });
-  const titleOpacity = useTransform(scrollYProgress, [0, 0.16], [1, 0]);
-  const titleY = useTransform(scrollYProgress, [0, 0.16], [0, -40]);
-  const hintOpacity = useTransform(scrollYProgress, [0, 0.07], [1, 0]);
+  const hintOpacity = useTransform(scrollYProgress, [0, 0.08], [1, 0]);
 
   return (
     <div className="relative bg-background text-foreground">
@@ -154,28 +152,17 @@ export default function Home() {
         </div>
       </motion.nav>
 
-      {/* Scroll-driven 3D hero — canvas is pinned, scrolling flies the drone */}
-      <section id="top" ref={heroRef} className="relative h-[300vh]">
+      {/* Scroll-driven 3D hero — text left, canvas right; scrolling flies the drone */}
+      <section id="top" ref={heroRef} className="relative h-[260vh]">
         <div className="sticky top-0 h-screen w-full overflow-hidden">
-          <Suspense fallback={
-            <div className="w-full h-full flex items-center justify-center bg-background">
-              <div className="animate-spin rounded-full h-8 w-8 border-b border-[var(--olive)]" />
-            </div>
-          }>
-            <DroneScanner3D scrollProgress={scrollYProgress} interactive={false} />
-          </Suspense>
-
-          {/* Headline */}
-          <motion.div
-            style={{ opacity: titleOpacity, y: titleY }}
-            className="absolute bottom-20 md:bottom-28 left-0 w-full px-6 md:px-10 z-20"
-          >
-            <div className="max-w-6xl mx-auto">
-              <h1 className="font-display text-[2.8rem] sm:text-6xl md:text-7xl lg:text-8xl leading-[0.95] tracking-[-0.03em] text-foreground max-w-4xl">
+          <div className="max-w-7xl mx-auto h-full px-6 grid grid-cols-1 md:grid-cols-[1fr_1.05fr] items-center gap-2 md:gap-10">
+            {/* Left: text on paper */}
+            <div className="relative z-20 pt-24 md:pt-0 order-1">
+              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[0.98] tracking-[-0.03em] text-foreground">
                 Find crop stress<br />
                 <span className="italic text-[var(--olive-deep)]">before the eye can.</span>
               </h1>
-              <div className="mt-8 flex items-center gap-6">
+              <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
                 <Link
                   href="/field"
                   className="group inline-flex items-center gap-2.5 bg-[var(--ink)] text-[var(--paper)] rounded-full pl-6 pr-2.5 py-2.5 text-base hover:bg-[var(--olive-deep)] transition-colors"
@@ -188,12 +175,23 @@ export default function Home() {
                 <Link href="/demo" className="text-base ulink text-muted-foreground">Try the demo</Link>
               </div>
             </div>
-          </motion.div>
+
+            {/* Right: 3D canvas, contained in its own column */}
+            <div className="relative h-[42vh] sm:h-[52vh] md:h-[84vh] w-full order-2">
+              <Suspense fallback={
+                <div className="w-full h-full flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b border-[var(--olive)]" />
+                </div>
+              }>
+                <DroneScanner3D scrollProgress={scrollYProgress} interactive={false} />
+              </Suspense>
+            </div>
+          </div>
 
           {/* Scroll hint */}
           <motion.div
             style={{ opacity: hintOpacity }}
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 text-center"
+            className="absolute bottom-7 left-1/2 -translate-x-1/2 z-20 text-center hidden md:block"
           >
             <p className="text-sm text-muted-foreground mb-2">Scroll to scan the field</p>
             <div className="bounce-down">
