@@ -99,13 +99,13 @@ export default function DemoPage() {
             const confidence = data.confidence;
 
             let status = "Unknown";
-            let color = "text-[#5c5b51]";
+            let color = "text-[var(--ink-soft)]";
             let Icon = AlertTriangle;
             let desc = "Condition identified by analysis.";
 
             if (className.toLowerCase().includes("healthy")) {
                 status = "Healthy";
-                color = "text-[#5d6f14]";
+                color = "text-[var(--olive)]";
                 Icon = CheckCircle2;
                 desc = "Plant shows no signs of stress or disease.";
             } else if (className.toLowerCase().includes("stress") || className.toLowerCase().includes("scorch")) {
@@ -136,7 +136,7 @@ export default function DemoPage() {
             const topResults = sortedProbs.map(item => {
                 let colorClass = "bg-neutral-300";
                 const nameLower = item.name.toLowerCase();
-                if (nameLower.includes("healthy")) colorClass = "bg-[#7e951c]";
+                if (nameLower.includes("healthy")) colorClass = "bg-[var(--olive)]";
                 else if (nameLower.includes("stress")) colorClass = "bg-blue-500";
                 else if (nameLower.includes("deficiency")) colorClass = "bg-orange-500";
                 else colorClass = "bg-red-500";
@@ -238,15 +238,17 @@ export default function DemoPage() {
     return (
         <div className="min-h-screen bg-background text-foreground">
             {/* Navigation */}
-            <nav className="fixed top-0 w-full z-50 backdrop-blur-md" style={{ background: "rgba(243,239,230,0.72)" }}>
+            <nav className="fixed top-0 w-full z-50 backdrop-blur-md" style={{ background: "rgba(250,250,250,0.8)" }}>
                 <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-2 group text-sm text-muted-foreground hover:text-foreground transition-colors">
                         <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
                         <span>Back</span>
                     </Link>
                     <div className="flex items-center gap-2.5">
-                        <Image src="/icon.svg" alt="Apollo" width={24} height={24} className="w-6 h-6" />
-                        <span className="logo-text text-lg">Apollo</span>
+                        <div className="w-6 h-6 bg-[var(--olive)] flex items-center justify-center">
+                            <div className="w-[62%] h-[62%] rounded-full bg-[var(--bg)]" />
+                        </div>
+                        <span className="font-display text-lg font-medium tracking-[-0.02em]">Apollo</span>
                     </div>
                     <div className="w-[60px]" />
                 </div>
@@ -278,13 +280,13 @@ export default function DemoPage() {
                             <h2 className="font-display text-2xl tracking-[-0.01em] mb-3">How it's built</h2>
                             <p className="text-muted-foreground">
                                 Trained on the <span className="text-foreground">ResNet-18</span> architecture over the
-                                {" "}<span className="text-foreground">PlantVillage</span> dataset — 70k+ images across 38 leaf conditions.
+                                {" "}<span className="text-foreground">PlantVillage</span> dataset: 70k+ images across 38 leaf conditions.
                             </p>
                         </div>
                         <div className="flex flex-wrap gap-2 pt-1">
-                            <span className="px-2.5 py-1 rounded-full border border-[var(--hairline)] text-xs text-muted-foreground">ResNet-18</span>
-                            <span className="px-2.5 py-1 rounded-full border border-[var(--hairline)] text-xs text-muted-foreground">PlantVillage 70k+</span>
-                            <span className="px-2.5 py-1 rounded-full border border-[var(--hairline)] text-xs text-muted-foreground">Telegram bot</span>
+                            <span className="px-2.5 py-1 border border-[var(--hairline)] text-xs text-muted-foreground">ResNet-18</span>
+                            <span className="px-2.5 py-1 border border-[var(--hairline)] text-xs text-muted-foreground">PlantVillage 70k+</span>
+                            <span className="px-2.5 py-1 border border-[var(--hairline)] text-xs text-muted-foreground">Telegram bot</span>
                         </div>
                     </div>
                 </div>
@@ -339,7 +341,7 @@ export default function DemoPage() {
 
                         <Button
                             size="lg"
-                            className="w-full bg-[var(--ink)] hover:bg-[var(--olive-deep)] text-[var(--paper)] text-base py-6 rounded-full"
+                            className="w-full bg-[var(--ink)] hover:bg-[var(--olive)] text-[var(--bg)] text-base py-6 rounded-none"
                             disabled={!image || isAnalyzing}
                             onClick={runAnalysis}
                         >
@@ -354,7 +356,7 @@ export default function DemoPage() {
 
                         <div className="text-xs text-center">
                             {backendStatus === "online" ? (
-                                <span className="text-[var(--olive-deep)] inline-flex items-center justify-center gap-1.5">
+                                <span className="text-[var(--olive)] inline-flex items-center justify-center gap-1.5">
                                     <span className="w-1.5 h-1.5 rounded-full bg-[var(--olive)] animate-pulse" /> Backend connected
                                 </span>
                             ) : backendStatus === "offline" ? (
@@ -405,7 +407,7 @@ export default function DemoPage() {
                                         </div>
                                         <div className="text-right">
                                             <p className="text-xs text-muted-foreground mb-1.5">Confidence</p>
-                                            <div className="font-display text-2xl tracking-[-0.01em] text-[var(--olive-deep)]">{(result.confidence * 100).toFixed(1)}%</div>
+                                            <div className="font-display text-2xl tracking-[-0.01em] text-[var(--olive)]">{(result.confidence * 100).toFixed(1)}%</div>
                                         </div>
                                     </div>
 
@@ -436,7 +438,7 @@ export default function DemoPage() {
                                     <div className="mt-6 pt-4 border-t border-[var(--hairline)]">
                                         <Button
                                             variant="outline"
-                                            className="w-full gap-2 rounded-full border-[var(--hairline-strong)] hover:border-[var(--olive)] hover:text-[var(--olive-deep)]"
+                                            className="w-full gap-2 rounded-none border-[var(--hairline-strong)] hover:border-[var(--olive)] hover:text-[var(--olive)]"
                                             onClick={() => setShowInsights(true)}
                                         >
                                             <Sparkles className="w-4 h-4" strokeWidth={1.5} />
@@ -447,7 +449,7 @@ export default function DemoPage() {
 
                                 {/* Insights Modal */}
                                 {showInsights && (
-                                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#1b1c17]/50 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setShowInsights(false)}>
+                                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#121410]/50 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setShowInsights(false)}>
                                         <div className="relative w-full max-w-lg p-6 max-h-[80vh] overflow-y-auto bg-card border border-[var(--hairline)] rounded-md shadow-xl animate-in zoom-in-95 duration-200 text-left" onClick={(e) => e.stopPropagation()}>
                                             <Button
                                                 variant="ghost"

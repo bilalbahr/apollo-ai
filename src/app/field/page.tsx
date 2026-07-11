@@ -1,50 +1,67 @@
 "use client";
 
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
 
 const DroneScanner3D = lazy(() =>
     import("@/components/DroneScanner3D").then(mod => ({ default: mod.DroneScanner3D }))
 );
 
 export default function FieldPage() {
+    /* Brief mono intro, then the simulation */
+    const [entered, setEntered] = useState(false);
+    useEffect(() => {
+        const t = setTimeout(() => setEntered(true), 1400);
+        return () => clearTimeout(t);
+    }, []);
+
     return (
         <div className="fixed inset-0 bg-background overflow-hidden">
+            {/* Entry veil */}
+            <motion.div
+                className="absolute inset-0 z-50 bg-background flex flex-col items-center justify-center gap-6"
+                animate={{ opacity: entered ? 0 : 1 }}
+                transition={{ duration: 0.7, ease: "easeOut" }}
+                style={{ pointerEvents: entered ? "none" : "auto" }}
+            >
+                <div className="w-14 h-14 bg-[var(--olive)] flex items-center justify-center">
+                    <div className="w-[62%] h-[62%] rounded-full bg-[var(--bg)]" />
+                </div>
+                <p className="font-label text-muted-foreground">Initializing field simulation</p>
+            </motion.div>
+
             <Suspense fallback={
                 <div className="w-full h-full flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b border-[var(--olive)]" />
+                    <p className="font-label text-muted-foreground">Loading terrain</p>
                 </div>
             }>
                 <DroneScanner3D interactive showHud />
             </Suspense>
 
-            {/* Exit */}
+            {/* Top bar */}
             <motion.div
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="absolute top-6 left-6 z-40"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: entered ? 1 : 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="absolute top-0 left-0 right-0 z-40 h-16 px-6 md:px-10 flex items-center justify-between text-sm"
             >
-                <Link
-                    href="/"
-                    className="inline-flex items-center gap-2 text-sm text-foreground/80 hover:text-foreground transition-colors px-4 py-2 rounded-full"
-                    style={{ background: "rgba(248,245,238,0.86)", backdropFilter: "blur(12px)", border: "1px solid rgba(27,28,23,0.1)" }}
-                >
-                    <ArrowLeft className="h-4 w-4" strokeWidth={1.5} /> Exit
-                </Link>
+                <Link href="/" className="ulink text-muted-foreground hover:text-foreground">Back</Link>
+                <p className="font-label text-muted-foreground hidden sm:block">Field simulation</p>
+                <Link href="/demo" className="ulink">Demo</Link>
             </motion.div>
 
-            {/* Title + controls hint */}
+            {/* Bottom-left: title + instructions */}
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
+                animate={{ opacity: entered ? 1 : 0, y: entered ? 0 : 10 }}
+                transition={{ duration: 0.6, delay: 0.35 }}
                 className="absolute bottom-8 left-6 md:left-10 z-40 pointer-events-none"
             >
-                <p className="font-display text-2xl md:text-3xl tracking-[-0.02em] text-foreground">The field</p>
-                <p className="mt-1.5 text-sm text-muted-foreground">Move to fly the drone · drag to orbit · scroll to zoom</p>
+                <p className="font-display text-3xl md:text-4xl font-medium tracking-[-0.03em]">The field</p>
+                <p className="mt-2 text-sm text-muted-foreground max-w-xs leading-relaxed">
+                    Move the cursor to fly the drone. Drag to orbit, scroll to zoom.
+                </p>
             </motion.div>
         </div>
     );

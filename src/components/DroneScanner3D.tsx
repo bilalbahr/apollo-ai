@@ -16,13 +16,13 @@ interface CropData {
 }
 
 const statusColors: Record<CropStatus, string> = {
-    healthy: "#7e951c",
+    healthy: "#5b6529",
     stressed: "#c2683a",
     moderate: "#c9a93f",
     "water-stress": "#6b96a8",
 };
 
-// Soft, warm leaf tones — kept close together so the field reads calm
+// Soft, warm leaf tones, kept close together so the field reads calm
 const leafColors: Record<CropStatus, string> = {
     healthy: "#8a9f3a",
     stressed: "#b27a45",
@@ -73,13 +73,13 @@ const generateCornField = (): CropData[] => {
 // A two-segment plane fakes the curve of a real corn leaf.
 const Leaf = ({ y, yaw, len, width, droop, color }: { y: number; yaw: number; len: number; width: number; droop: number; color: string }) => (
     <group position={[0, y, 0]} rotation={[0, yaw, 0]}>
-        {/* base half — rises slightly off the stem */}
+        {/* base half, rises slightly off the stem */}
         <group rotation={[0, 0, 0.25]}>
             <mesh position={[len * 0.25, 0, 0]} castShadow>
                 <planeGeometry args={[len * 0.5, width]} />
                 <meshStandardMaterial color={color} side={THREE.DoubleSide} roughness={0.72} />
             </mesh>
-            {/* tip half — droops down */}
+            {/* tip half, droops down */}
             <group position={[len * 0.5, 0, 0]} rotation={[0, 0, -droop]}>
                 <mesh position={[len * 0.25, 0, 0]} castShadow>
                     <planeGeometry args={[len * 0.5, width * 0.7]} />
@@ -131,7 +131,7 @@ const CornStalk = ({ position, status, scale, rotation, interactive }: CropData 
     );
 };
 
-// Drone — driven by cursor (interactive) or scroll progress (home hero)
+// Drone, driven by cursor (interactive) or scroll progress (home hero)
 const Drone = ({
     crops,
     onScanUpdate,
@@ -225,7 +225,7 @@ const Drone = ({
             </mesh>
             <mesh position={[0, 0.06, 0]}>
                 <boxGeometry args={[0.16, 0.02, 0.16]} />
-                <meshStandardMaterial color="#7e951c" />
+                <meshStandardMaterial color="#5b6529" />
             </mesh>
 
             {[[-0.22, 0, -0.22], [0.22, 0, -0.22], [0.22, 0, 0.22], [-0.22, 0, 0.22]].map((pos, i) => (
@@ -243,10 +243,10 @@ const Drone = ({
 
             {/* Coverage frame on the ground */}
             <group position={[0, -droneHeight, 0]}>
-                <Line points={[corners[0], corners[1], corners[2], corners[3], corners[0]]} color="#7e951c" lineWidth={2} />
+                <Line points={[corners[0], corners[1], corners[2], corners[3], corners[0]]} color="#5b6529" lineWidth={2} />
                 <mesh position={[0, 0.005, 0]} rotation={[-Math.PI / 2, 0, 0]}>
                     <planeGeometry args={[coverageSize, coverageSize]} />
-                    <meshStandardMaterial color="#7e951c" transparent opacity={0.1} />
+                    <meshStandardMaterial color="#5b6529" transparent opacity={0.1} />
                 </mesh>
             </group>
         </group>
@@ -311,7 +311,7 @@ const Scene = ({
     );
 };
 
-// Heads-up readout — shown only on the immersive page
+// Heads-up readout, shown only on the immersive page
 const InfoPanel = ({ scannedCrops }: { scannedCrops: CropData[] }) => {
     const stats = useMemo(() => ({
         total: scannedCrops.length,
@@ -326,42 +326,39 @@ const InfoPanel = ({ scannedCrops }: { scannedCrops: CropData[] }) => {
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: -12 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="absolute top-24 right-6 w-60 rounded-xl z-30"
-            style={{
-                background: "rgba(248,245,238,0.86)",
-                backdropFilter: "blur(12px)",
-                border: "1px solid rgba(27,28,23,0.1)",
-            }}
+            transition={{ duration: 0.6, ease: "easeOut", delay: 0.5 }}
+            className="absolute bottom-8 right-6 md:right-10 w-64 z-30 bg-[var(--bg)]"
+            style={{ border: "1px solid var(--hairline)" }}
         >
             <div className="p-5">
-                <div className="flex items-center gap-2 mb-4">
-                    <span className="w-2 h-2 rounded-full bg-[#7e951c] animate-pulse" />
-                    <span className="text-sm text-[#5c5b51]">Drone scan</span>
-                    <span className="ml-auto font-mono text-xs text-[#5c5b51]">live</span>
+                <div className="flex items-center justify-between mb-5">
+                    <span className="font-label text-muted-foreground">Drone scan</span>
+                    <span className="flex items-center gap-2 font-label text-muted-foreground">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--olive)] animate-pulse" /> live
+                    </span>
                 </div>
 
-                <div className="space-y-3 text-[15px]">
+                <div className="space-y-3 text-sm">
                     <div className="flex justify-between items-baseline">
-                        <span className="text-[#5c5b51]">Status</span>
+                        <span className="text-muted-foreground">Status</span>
                         <span className="font-medium" style={{ color: statusColors[overallStatus] }}>
                             {statusLabels[overallStatus]}
                         </span>
                     </div>
                     <div className="flex justify-between items-baseline">
-                        <span className="text-[#5c5b51]">Crops in view</span>
-                        <span className="font-mono text-[#1b1c17]">{stats.total}</span>
+                        <span className="text-muted-foreground">Crops in view</span>
+                        <span className="font-label text-foreground">{stats.total}</span>
                     </div>
-                    <div className="pt-3">
-                        <div className="flex justify-between text-sm text-[#5c5b51] mb-2">
+                    <div className="pt-3 border-t border-[var(--hairline)]">
+                        <div className="flex justify-between text-sm text-muted-foreground mb-2">
                             <span>Confidence</span>
-                            <span className="font-mono">{stats.total > 0 ? `${85 + Math.min(stats.total, 14)}%` : "—"}</span>
+                            <span className="font-label">{stats.total > 0 ? `${85 + Math.min(stats.total, 14)}%` : "0%"}</span>
                         </div>
-                        <div className="h-1 bg-[rgba(27,28,23,0.1)] rounded-full overflow-hidden">
+                        <div className="h-px bg-[var(--hairline)] overflow-hidden">
                             <motion.div
-                                className="h-full bg-[#7e951c]"
+                                className="h-full bg-[var(--olive)]"
                                 initial={{ width: 0 }}
                                 animate={{ width: stats.total > 0 ? `${85 + Math.min(stats.total, 14)}%` : "0%" }}
                                 transition={{ duration: 0.5, ease: "easeOut" }}
@@ -374,7 +371,7 @@ const InfoPanel = ({ scannedCrops }: { scannedCrops: CropData[] }) => {
     );
 };
 
-// Pure scene on a transparent canvas — pages render their own overlays.
+// Pure scene on a transparent canvas, pages render their own overlays.
 export const DroneScanner3D = ({
     interactive = false,
     scrollProgress,
