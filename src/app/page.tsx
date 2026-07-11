@@ -327,8 +327,7 @@ export default function Home() {
       {/* Platform */}
       <section id="platform" className="max-w-6xl mx-auto px-6 py-24 md:py-32">
         <Reveal>
-          <p className="font-label text-muted-foreground">Platform</p>
-          <h2 className="mt-6 font-display text-3xl md:text-5xl font-medium tracking-[-0.03em] leading-[1.08] max-w-3xl">
+          <h2 className="font-display text-3xl md:text-5xl font-medium tracking-[-0.03em] leading-[1.08] max-w-3xl">
             One engine, three surfaces, every scale of farm.
           </h2>
         </Reveal>
@@ -352,8 +351,7 @@ export default function Home() {
       <section id="technology" className="border-t border-[var(--hairline)]">
         <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
           <Reveal>
-            <p className="font-label text-muted-foreground">Technology</p>
-            <h2 className="mt-6 font-display text-3xl md:text-5xl font-medium tracking-[-0.03em] leading-[1.08] max-w-3xl">
+            <h2 className="font-display text-3xl md:text-5xl font-medium tracking-[-0.03em] leading-[1.08] max-w-3xl">
               A full diagnostic stack behind a single photo.
             </h2>
           </Reveal>
@@ -399,9 +397,6 @@ export default function Home() {
       {/* Applications */}
       <section id="applications" className="border-t border-[var(--hairline)]">
         <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
-          <Reveal>
-            <p className="font-label text-muted-foreground mb-14">Applications</p>
-          </Reveal>
           <div>
             {applications.map((a, i) => (
               <Reveal key={i} delay={i * 0.04}>
@@ -418,9 +413,6 @@ export default function Home() {
       {/* Story */}
       <section id="story" className="border-t border-[var(--hairline)]">
         <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
-          <Reveal>
-            <p className="font-label text-muted-foreground mb-14">Story</p>
-          </Reveal>
           <div>
             {story.map((item, i) => (
               <Reveal key={i} delay={i * 0.04}>
