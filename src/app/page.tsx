@@ -37,22 +37,18 @@ const platform = [
 
 const technology = [
   {
-    label: "Dataset",
     title: "70,000 leaves",
     note: "Trained on the PlantVillage corpus: 38 disease and stress conditions across the crops that feed the region.",
   },
   {
-    label: "Vision",
     title: "Convolutional backbone",
     note: "A ResNet-18 classifier tuned for leaf pathology, exported to ONNX and served in milliseconds on commodity hardware.",
   },
   {
-    label: "Reasoning",
     title: "Agronomic language layer",
     note: "A language model turns raw probabilities into plain guidance: what the condition is, how it spreads, what to apply.",
   },
   {
-    label: "Delivery",
     title: "Web, Telegram, API",
     note: "The same engine behind every surface, so a smallholder's phone and an agribusiness dashboard see the same truth.",
   },
@@ -372,8 +368,7 @@ export default function Home() {
               {technology.map((t, i) => (
                 <Reveal key={i} delay={i * 0.05}>
                   <div className={`py-7 ${i > 0 ? "border-t border-[var(--hairline)]" : ""}`}>
-                    <p className="font-label text-muted-foreground">{t.label}</p>
-                    <h3 className="mt-2 font-display text-xl md:text-2xl font-medium tracking-[-0.02em]">{t.title}</h3>
+                    <h3 className="font-display text-xl md:text-2xl font-medium tracking-[-0.02em]">{t.title}</h3>
                     <p className="mt-2 text-muted-foreground leading-relaxed max-w-lg">{t.note}</p>
                   </div>
                 </Reveal>
