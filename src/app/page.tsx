@@ -13,21 +13,18 @@ import hackathonImg from "../images/hackathon.jpg";
 
 const platform = [
   {
-    num: "01",
     title: "Scout",
     note: "Diagnosis in the field, from a phone. A photo returns the condition, a confidence score, and what to do next, delivered on the web and through Telegram in the languages farmers actually speak.",
     image: "/photos/farmer-phone.jpg",
     alt: "Field workers moving through crop rows",
   },
   {
-    num: "02",
     title: "Fleet",
     note: "Standard drone imagery becomes a row-level stress map. Flag the exact plants that need attention weeks before symptoms are visible from the ground, on hardware farms already fly.",
     image: "/photos/drone.jpg",
     alt: "A quadcopter drone in flight",
   },
   {
-    num: "03",
     title: "Grid",
     note: "Diagnostics as infrastructure. Scan history, alerts, and an API that plugs crop intelligence into lending, insurance, and procurement decisions across the supply chain.",
     image: "/photos/aerial-rows.jpg",
@@ -336,9 +333,7 @@ export default function Home() {
               <div className="relative aspect-[4/3] overflow-hidden">
                 <Image src={p.image} alt={p.alt} fill sizes="(max-width: 768px) 100vw, 384px" className="object-cover img-grade" />
               </div>
-              <div className="mt-6 flex items-baseline gap-4">
-                <span className="font-label text-muted-foreground">{p.num}</span>
-                <h3 className="font-display text-2xl md:text-3xl font-medium tracking-[-0.02em]">{p.title}</h3>
+              <div className="mt-6 flex items-baseline gap-4">                <h3 className="font-display text-2xl md:text-3xl font-medium tracking-[-0.02em]">{p.title}</h3>
               </div>
               <p className="mt-3 text-muted-foreground leading-relaxed">{p.note}</p>
             </Reveal>
