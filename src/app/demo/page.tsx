@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Logo } from "@/components/Logo";
 import { ArrowLeft, Upload, Loader2, AlertTriangle, CheckCircle2, Leaf, AlertOctagon, Droplets, Sparkles, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -245,7 +246,7 @@ export default function DemoPage() {
                         <span>Back</span>
                     </Link>
                     <div className="flex items-center gap-2.5">
-                        <Image src="/apollologo.png" alt="Apollo" width={26} height={26} className="w-[26px] h-[26px]" />
+                        <Logo size={26} />
                         <span className="font-display text-lg font-medium tracking-[-0.02em]">Apollo</span>
                     </div>
                     <div className="w-[60px]" />

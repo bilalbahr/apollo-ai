@@ -6,6 +6,7 @@ import Image from "next/image";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 
 import hackathonImg from "../images/hackathon.jpg";
+import { Logo } from "@/components/Logo";
 
 /* ────────────────────────────────────────────────
    Copy
@@ -120,10 +121,8 @@ const Reveal = ({ children, className = "", delay = 0 }: { children: React.React
   );
 };
 
-/* The Apollo plant mark */
-const Mark = ({ size = 56 }: { size?: number }) => (
-  <Image src="/apollologo.png" alt="Apollo" width={size} height={size} style={{ width: size, height: size }} />
-);
+/* The Apollo leaf mark */
+const Mark = ({ size = 56 }: { size?: number }) => <Logo size={size} />;
 
 /* ────────────────────────────────────────────────
    Page
