@@ -1,58 +1,119 @@
 "use client";
 
-import { useRef, lazy, Suspense } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 
-const DroneScanner3D = lazy(() => import("@/components/DroneScanner3D").then(mod => ({ default: mod.DroneScanner3D })));
-import PointillismWord from "@/components/PointillismWord";
-import {
-  Upload,
-  Cpu,
-  Activity,
-  Github,
-  Linkedin,
-  ArrowUpRight,
-  ArrowRight,
-  ArrowUp,
-} from "lucide-react";
-
 import hackathonImg from "../images/hackathon.jpg";
+import { Logo } from "@/components/Logo";
+
+/* ────────────────────────────────────────────────
+   Copy
+   ──────────────────────────────────────────────── */
+
+const platform = [
+  {
+    title: "Scout",
+    note: "Diagnosis in the field, from a phone. A photo returns the condition, a confidence score, and what to do next, delivered on the web and through Telegram in the languages farmers actually speak.",
+    image: "/photos/farmer-phone.jpg",
+    alt: "Field workers moving through crop rows",
+  },
+  {
+    title: "Fleet",
+    note: "Standard drone imagery becomes a row-level stress map. Flag the exact plants that need attention weeks before symptoms are visible from the ground, on hardware farms already fly.",
+    image: "/photos/drone.jpg",
+    alt: "A quadcopter drone in flight",
+  },
+  {
+    title: "Grid",
+    note: "Diagnostics as infrastructure. Scan history, alerts, and an API that plugs crop intelligence into lending, insurance, and procurement decisions across the supply chain.",
+    image: "/photos/aerial-rows.jpg",
+    alt: "Young crop rows in dark soil",
+  },
+];
+
+const technology = [
+  {
+    title: "70,000 leaves",
+    note: "Trained on the PlantVillage corpus: 38 disease and stress conditions across the crops that feed the region.",
+  },
+  {
+    title: "Convolutional backbone",
+    note: "A ResNet-18 classifier tuned for leaf pathology, exported to ONNX and served in milliseconds on commodity hardware.",
+  },
+  {
+    title: "Agronomic language layer",
+    note: "A language model turns raw probabilities into plain guidance: what the condition is, how it spreads, what to apply.",
+  },
+  {
+    title: "Web, Telegram, API",
+    note: "The same engine behind every surface, so a smallholder's phone and an agribusiness dashboard see the same truth.",
+  },
+];
 
 const stats = [
-  { value: "40%", label: "of global crops lost to pests & disease each year" },
-  { value: "$220B", label: "annual economic loss worldwide" },
-  { value: "72h", label: "typical delay in manual detection" },
+  { value: "40%", label: "of global crops are lost to pests and disease each year" },
+  { value: "$220B", label: "in annual economic losses worldwide" },
+  { value: "72h", label: "typical delay of manual scouting behind the plant" },
 ];
 
-const steps = [
-  { icon: Upload, title: "Capture", note: "Phone or drone imagery" },
-  { icon: Cpu, title: "Analyze", note: "A CNN reads the leaf signal" },
-  { icon: Activity, title: "Diagnose", note: "Condition, confidence, action" },
+const applications = [
+  {
+    title: "Smallholders",
+    note: "A field agronomist in every pocket, at the cost of a photo.",
+  },
+  {
+    title: "Agribusiness",
+    note: "Fleet-scale monitoring across estates, with row-level precision.",
+  },
+  {
+    title: "Banks and insurers",
+    note: "Objective crop-health evidence for lending, claims, and risk models.",
+  },
+  {
+    title: "Food security programs",
+    note: "Early regional outbreak signals, built from ground truth instead of satellites alone.",
+  },
 ];
 
-const stack = [
-  { title: "PlantVillage", note: "38 leaf conditions, 70k+ images" },
-  { title: "ResNet-18", note: "Convolutional classifier" },
-  { title: "LLM reports", note: "Plain-language guidance" },
+const story = [
+  {
+    year: "2024",
+    title: "The engine",
+    note: "A ResNet-18 classifier trained on the PlantVillage dataset: more than 70,000 leaf images across 38 conditions.",
+  },
+  {
+    year: "2025",
+    title: "First place at AI500",
+    note: "Apollo won the AI500 Hackathon hosted by Agrobank, validated by the largest agricultural bank in Uzbekistan.",
+    image: true,
+  },
+  {
+    year: "2026",
+    title: "Into the field",
+    note: "Multi-crop coverage, scan history, and a mobile app built for the people who walk the rows.",
+  },
+  {
+    year: "Beyond",
+    title: "The fleet",
+    note: "Autonomous drone passes, live monitoring, and a public API for the wider industry.",
+  },
 ];
 
-const roadmap = [
-  { title: "Now", items: ["Image upload", "Disease detection", "Diagnostic reports"] },
-  { title: "Next", items: ["Multi-crop", "History", "Mobile app"] },
-  { title: "Later", items: ["Drone fleet", "Live monitoring", "Public API"] },
-];
+/* ────────────────────────────────────────────────
+   Shared pieces
+   ──────────────────────────────────────────────── */
 
 const Reveal = ({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const inView = useInView(ref, { once: true, margin: "-60px" });
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 22 }}
+      initial={{ opacity: 0, y: 14 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, ease: [0.21, 0.5, 0.27, 1], delay }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay }}
       className={className}
     >
       {children}
@@ -60,304 +121,405 @@ const Reveal = ({ children, className = "", delay = 0 }: { children: React.React
   );
 };
 
-const TimelineStep = ({
-  step,
-  index,
-}: {
-  step: { icon: typeof Upload; title: string; note: string };
-  index: number;
-}) => {
-  const ref = useRef(null);
-  const inView = useInView(ref, { margin: "-45% 0px -45% 0px" });
-  const Icon = step.icon;
-
-  return (
-    <div ref={ref} className="relative pl-24 md:pl-32 min-h-[6rem]">
-      {/* Node sitting on the spine */}
-      <motion.div
-        className="absolute left-0 top-0 w-16 h-16 md:w-[68px] md:h-[68px] rounded-2xl flex items-center justify-center z-10"
-        animate={{ backgroundColor: inView ? "#7e951c" : "#e7ead4" }}
-        transition={{ duration: 0.45, ease: "easeOut" }}
-      >
-        <motion.div animate={{ color: inView ? "#f3efe6" : "#5d6f14" }} transition={{ duration: 0.45 }}>
-          <Icon className="w-7 h-7" strokeWidth={1.5} />
-        </motion.div>
-      </motion.div>
-
-      <motion.div
-        animate={{ opacity: inView ? 1 : 0.45, y: inView ? 0 : 8 }}
-        transition={{ duration: 0.5, ease: [0.21, 0.5, 0.27, 1] }}
-        className="relative pt-1"
-      >
-        <span
-          className="pointer-events-none absolute -top-7 right-0 md:right-6 font-display leading-none select-none"
-          style={{ fontSize: "5.5rem", color: "rgba(126,149,28,0.1)" }}
-        >
-          {index + 1}
-        </span>
-        <h3 className="font-display text-3xl md:text-4xl tracking-[-0.01em]">{step.title}</h3>
-        <p className="mt-3 text-lg text-muted-foreground leading-relaxed max-w-md">{step.note}</p>
-      </motion.div>
-    </div>
-  );
-};
+/* ────────────────────────────────────────────────
+   Page
+   ──────────────────────────────────────────────── */
 
 export default function Home() {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end end"] });
-  const hintOpacity = useTransform(scrollYProgress, [0, 0.08], [1, 0]);
+  /* Loader: counts to 100, then releases the page */
+  const [count, setCount] = useState(0);
+  const [loaded, setLoaded] = useState(false);
 
-  const timelineRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: lineProgress } = useScroll({ target: timelineRef, offset: ["start 0.55", "end 0.65"] });
+  useEffect(() => {
+    const duration = 1700;
+    const start = performance.now();
+    let raf: number;
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setCount(Math.round(eased * 100));
+      if (t < 1) raf = requestAnimationFrame(tick);
+      else setTimeout(() => setLoaded(true), 350);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.style.overflow = loaded ? "" : "hidden";
+    return () => { document.documentElement.style.overflow = ""; };
+  }, [loaded]);
+
+  /* Scroll-driven mask reveal */
+  const maskRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: maskRef, offset: ["start start", "end end"] });
+
+  /* The leaf is a pointed lens, so cover is driven by its narrow axis:
+     the lens half-width is ~0.154 of the rendered box (210px). */
+  const [coverScale, setCoverScale] = useState(40);
+  useEffect(() => {
+    const compute = () => {
+      const minorRadius = 210 * 0.154;
+      const reach = Math.hypot(window.innerWidth / 2, window.innerHeight / 2 + 120);
+      setCoverScale((reach / minorRadius) * 1.25);
+    };
+    compute();
+    window.addEventListener("resize", compute);
+    return () => window.removeEventListener("resize", compute);
+  }, []);
+
+  const leafScale = useTransform(scrollYProgress, [0.05, 0.42], [1, coverScale]);
+  const veinOpacity = useTransform(scrollYProgress, [0.05, 0.12], [1, 0]);
+  const lockupOpacity = useTransform(scrollYProgress, [0.04, 0.12], [1, 0]);
+  const hintOpacity = useTransform(scrollYProgress, [0, 0.05], [1, 0]);
+  const circleR = useTransform(scrollYProgress, [0.46, 0.9], ["0%", "120%"]);
+  const clip = useTransform(circleR, (r) => `circle(${r} at 50% 50%)`);
+  const revealY = useTransform(scrollYProgress, [0.46, 0.9], [40, 0]);
 
   return (
     <div className="relative bg-background text-foreground">
+      {/* Loader overlay */}
+      <motion.div
+        className="fixed inset-0 z-[90] bg-background"
+        animate={{ opacity: loaded ? 0 : 1 }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
+        style={{ pointerEvents: loaded ? "none" : "auto" }}
+      >
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-7">
+          <Logo size={140} />
+          <p className="font-display text-4xl md:text-5xl font-medium tracking-[-0.03em]">Apollo</p>
+        </div>
+        <p className="absolute bottom-8 right-8 font-display text-6xl md:text-8xl font-medium tracking-[-0.04em] tabular-nums">
+          {count}%
+        </p>
+      </motion.div>
+
       {/* Navigation */}
       <motion.nav
-        className="fixed top-0 w-full z-50 backdrop-blur-md"
-        style={{ background: "rgba(243,239,230,0.6)" }}
-        initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="fixed top-0 w-full z-50"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: loaded ? 1 : 0 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
       >
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <a href="#top" className="flex items-center gap-2.5">
-            <Image src="/icon.svg" alt="Apollo" width={28} height={28} className="w-7 h-7" />
-            <span className="logo-text text-xl">Apollo</span>
-          </a>
-          <div className="hidden md:flex items-center gap-9 text-[15px] text-muted-foreground">
-            <a href="#approach" className="ulink">Approach</a>
-            <Link href="/field" className="ulink">Field</Link>
-            <Link
-              href="/demo"
-              className="inline-flex items-center gap-1.5 text-foreground hover:text-[var(--olive-deep)] transition-colors"
-            >
-              Demo <ArrowUpRight className="w-4 h-4" />
-            </Link>
+        <div className="px-6 md:px-10 h-16 flex items-center justify-between text-sm">
+          <div className="flex items-center gap-8">
+            <a href="#platform" className="ulink">Platform</a>
+            <a href="#technology" className="ulink hidden sm:inline">Technology</a>
+            <a href="#applications" className="ulink hidden md:inline">Applications</a>
           </div>
-          <Link href="/demo" className="md:hidden text-[15px] text-foreground inline-flex items-center gap-1">
-            Demo <ArrowUpRight className="w-4 h-4" />
-          </Link>
+          <div className="flex items-center gap-8">
+            <a href="#story" className="ulink hidden sm:inline">Story</a>
+            <Link href="/field" className="ulink hidden sm:inline">Field</Link>
+            <Link href="/demo" className="ulink">Demo</Link>
+          </div>
         </div>
       </motion.nav>
 
-      {/* Scroll-driven 3D hero — text left, canvas right; scrolling flies the drone */}
-      <section id="top" ref={heroRef} className="relative h-[260vh]">
-        <div className="sticky top-0 h-screen w-full overflow-hidden">
-          <div className="max-w-7xl mx-auto h-full px-6 grid grid-cols-1 md:grid-cols-[1fr_1.05fr] items-center gap-2 md:gap-10">
-            {/* Left: text on paper */}
-            <div className="relative z-20 pt-24 md:pt-0 order-1">
-              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[0.98] tracking-[-0.03em] text-foreground">
-                Find crop stress<br />
-                <span className="italic text-[var(--olive-deep)]">before the eye can.</span>
-              </h1>
-              <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
-                <Link
-                  href="/field"
-                  className="group inline-flex items-center gap-2.5 bg-[var(--ink)] text-[var(--paper)] rounded-full pl-6 pr-2.5 py-2.5 text-base hover:bg-[var(--olive-deep)] transition-colors"
-                >
-                  Enter the field
-                  <span className="w-7 h-7 rounded-full bg-[var(--paper)]/15 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
-                    <ArrowUpRight className="w-4 h-4" />
-                  </span>
-                </Link>
-                <Link href="/demo" className="text-base ulink text-muted-foreground">Try the demo</Link>
-              </div>
-            </div>
+      {/* Hero + mask reveal */}
+      <section ref={maskRef} className="relative h-[340vh]">
+        <div className="sticky top-0 h-screen overflow-hidden">
+          {/* Lockup: mark + wordmark */}
+          <motion.div
+            style={{ opacity: lockupOpacity }}
+            className="absolute inset-0 flex flex-col items-center justify-center gap-8 z-10"
+          >
+            {/* Spacer where the leaf sits; the leaf itself lives on the growing layer */}
+            <div style={{ width: 210, height: 210 }} aria-hidden />
+            <motion.h1
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: loaded ? 1 : 0, y: loaded ? 0 : 10 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="font-display text-5xl md:text-7xl font-medium tracking-[-0.04em]"
+            >
+              Apollo
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: loaded ? 1 : 0 }}
+              transition={{ duration: 0.8, delay: 0.35 }}
+              className="font-label text-muted-foreground"
+            >
+              Superintelligent vision for the growing world
+            </motion.p>
+          </motion.div>
 
-            {/* Right: 3D canvas, contained in its own column */}
-            <div className="relative h-[42vh] sm:h-[52vh] md:h-[84vh] w-full order-2">
-              <Suspense fallback={
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b border-[var(--olive)]" />
-                </div>
-              }>
-                <DroneScanner3D scrollProgress={scrollYProgress} interactive={false} />
-              </Suspense>
-            </div>
-          </div>
+          {/* The growing leaf: the hero mark itself scales to swallow the viewport.
+              This layer mirrors the lockup's layout so the leaf aligns exactly
+              with the spacer above; the vein and stem dissolve as it grows. */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: loaded ? 1 : 0 }}
+            transition={{ duration: 0.8 }}
+            className="absolute inset-0 flex flex-col items-center justify-center gap-8"
+            aria-hidden
+          >
+            <motion.svg
+              width={210}
+              height={210}
+              viewBox="0 0 100 100"
+              fill="none"
+              style={{ scale: leafScale }}
+            >
+              <path d="M 30 82 A 54 54 0 0 1 70 18 A 54 54 0 0 1 30 82 Z" fill="var(--olive)" />
+              <motion.path
+                d="M 34 78 L 66 22"
+                stroke="var(--bg)"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                style={{ opacity: veinOpacity }}
+              />
+              <motion.path
+                d="M 30 82 Q 24 88 22 94"
+                stroke="var(--olive)"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                style={{ opacity: veinOpacity }}
+              />
+            </motion.svg>
+            {/* Invisible copies of the lockup text keep the flex geometry identical */}
+            <h1 className="font-display text-5xl md:text-7xl font-medium tracking-[-0.04em] opacity-0 select-none">Apollo</h1>
+            <p className="font-label opacity-0 select-none">Superintelligent vision for the growing world</p>
+          </motion.div>
+
+          {/* White layer revealed through a circle, carrying the manifesto lead */}
+          <motion.div style={{ clipPath: clip }} className="absolute inset-0 bg-background z-20 flex items-center justify-center">
+            <motion.h2
+              style={{ y: revealY }}
+              className="font-display text-3xl md:text-5xl lg:text-6xl font-medium tracking-[-0.03em] leading-[1.08] max-w-4xl px-6 text-center"
+            >
+              Most crop damage is decided before anyone can see it.
+            </motion.h2>
+          </motion.div>
 
           {/* Scroll hint */}
-          <motion.div
+          <motion.p
             style={{ opacity: hintOpacity }}
-            className="absolute bottom-7 left-1/2 -translate-x-1/2 z-20 text-center hidden md:block"
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 font-label text-muted-foreground"
           >
-            <p className="text-sm text-muted-foreground mb-2">Scroll to scan the field</p>
-            <div className="bounce-down">
-              <svg className="w-5 h-5 mx-auto text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-              </svg>
-            </div>
-          </motion.div>
+            Scroll
+          </motion.p>
         </div>
       </section>
 
-      {/* Statement + numbers */}
-      <section id="problem" className="max-w-6xl mx-auto px-6 py-32 md:py-44">
+      {/* Manifesto */}
+      <section className="max-w-3xl mx-auto px-6 py-28 md:py-40">
+        <div className="space-y-10 text-lg md:text-xl leading-[1.7] font-medium">
+          <Reveal>
+            <p>
+              Stress shows on a single leaf days before it shows across a field. By the
+              time discoloration is visible from the road, the yield is already paying
+              for it.
+            </p>
+          </Reveal>
+          <Reveal>
+            <p className="text-muted-foreground">
+              Agriculture&apos;s answer has been more hardware: multispectral rigs,
+              fixed sensors, satellite contracts. Precision farming exists, but only
+              for the operations that can afford it.
+            </p>
+          </Reveal>
+          <Reveal>
+            <p className="text-muted-foreground">
+              Apollo takes the opposite path. We build the intelligence layer, not the
+              sensor. Our models read the imagery farms already produce, from a phone
+              at the end of a row to a drone over a thousand hectares, and return a
+              diagnosis in seconds.
+            </p>
+          </Reveal>
+          <Reveal>
+            <p>
+              We&apos;re not adding equipment to the farm. We&apos;re teaching the cameras it
+              already has to diagnose.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Full-bleed image break */}
+      <section className="relative h-[70vh] md:h-[85vh] overflow-hidden">
+        <Image
+          src="/photos/aerial-top.jpg"
+          alt="Aerial view of cultivated crop rows"
+          fill
+          sizes="100vw"
+          className="object-cover img-grade"
+        />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(18,20,16,0.55), rgba(18,20,16,0.05) 45%)" }} />
+        <p className="absolute bottom-8 left-6 md:left-10 font-label text-[var(--sage-light)]">
+          Row-level stress mapping from standard imagery
+        </p>
+      </section>
+
+      {/* Platform */}
+      <section id="platform" className="max-w-6xl mx-auto px-6 py-24 md:py-32">
         <Reveal>
-          <h2 className="font-display text-4xl md:text-6xl leading-[1.05] tracking-[-0.02em] max-w-4xl">
-            Stress shows on a leaf long before it shows in a field.
+          <h2 className="font-display text-3xl md:text-5xl font-medium tracking-[-0.03em] leading-[1.08] max-w-3xl">
+            One engine, three surfaces, every scale of farm.
           </h2>
         </Reveal>
-        <div className="mt-20 md:mt-28 grid sm:grid-cols-3 gap-14 md:gap-16">
-          {stats.map((s, i) => (
+        <div className="mt-16 md:mt-24 grid md:grid-cols-3 gap-10 md:gap-8">
+          {platform.map((p, i) => (
             <Reveal key={i} delay={i * 0.08}>
-              <p className="font-display text-6xl md:text-7xl tracking-[-0.03em] text-[var(--olive-deep)]">{s.value}</p>
-              <p className="mt-4 text-muted-foreground leading-relaxed max-w-[18rem]">{s.label}</p>
+              <div className="relative aspect-[4/3] overflow-hidden">
+                <Image src={p.image} alt={p.alt} fill sizes="(max-width: 768px) 100vw, 384px" className="object-cover img-grade" />
+              </div>
+              <div className="mt-6 flex items-baseline gap-4">                <h3 className="font-display text-2xl md:text-3xl font-medium tracking-[-0.02em]">{p.title}</h3>
+              </div>
+              <p className="mt-3 text-muted-foreground leading-relaxed">{p.note}</p>
             </Reveal>
           ))}
         </div>
       </section>
 
-      {/* Approach — vertical scroll-driven timeline */}
-      <section id="approach" className="max-w-6xl mx-auto px-6 py-32 md:py-44">
-        <Reveal>
-          <h2 className="font-display text-4xl md:text-6xl tracking-[-0.02em]">How it works</h2>
-          <p className="mt-4 text-lg text-muted-foreground">Three steps, a few seconds.</p>
-        </Reveal>
-
-        <div ref={timelineRef} className="relative mt-20 max-w-3xl">
-          {/* Spine: faint track + olive progress that fills as you scroll */}
-          <div className="absolute left-8 md:left-[34px] top-4 bottom-16 w-[2px] -translate-x-1/2 bg-[var(--hairline)]" />
-          <motion.div
-            style={{ scaleY: lineProgress }}
-            className="absolute left-8 md:left-[34px] top-4 bottom-16 w-[2px] -translate-x-1/2 bg-[var(--olive)] origin-top"
-          />
-
-          <div className="space-y-20 md:space-y-28">
-            {steps.map((step, i) => (
-              <TimelineStep key={i} step={step} index={i} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Recognition */}
-      <section className="max-w-6xl mx-auto px-6 py-32 md:py-44 grid md:grid-cols-2 gap-14 md:gap-20 items-center">
-        <Reveal>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
-            <Image
-              src={hackathonImg}
-              alt="Apollo team at the AI500 Hackathon"
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover"
-              priority
-            />
-          </div>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <h2 className="font-display text-4xl md:text-6xl tracking-[-0.02em] leading-[1.02]">
-            AI500 Hackathon<br /><span className="italic text-[var(--olive-deep)]">winner</span>.
-          </h2>
-          <p className="mt-6 text-lg text-muted-foreground max-w-md leading-relaxed">
-            First place at the AI500 Hackathon hosted by Agrobank.
-          </p>
-          <a
-            href="https://ai500.agrobank.uz/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-8 inline-flex items-center gap-2 text-base ulink"
-          >
-            About AI500 <ArrowUpRight className="w-4 h-4" />
-          </a>
-        </Reveal>
-      </section>
-
-      {/* Stack + Roadmap */}
-      <section id="stack" className="max-w-6xl mx-auto px-6 py-32 md:py-44 grid md:grid-cols-2 gap-16 md:gap-24">
-        <div>
+      {/* Technology */}
+      <section id="technology" className="border-t border-[var(--hairline)]">
+        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
           <Reveal>
-            <h2 className="font-display text-4xl md:text-5xl tracking-[-0.02em] mb-12">Under the hood</h2>
+            <h2 className="font-display text-3xl md:text-5xl font-medium tracking-[-0.03em] leading-[1.08] max-w-3xl">
+              A full diagnostic stack behind a single photo.
+            </h2>
           </Reveal>
-          <div className="space-y-10">
-            {stack.map((t, i) => (
-              <Reveal key={i} delay={i * 0.06}>
-                <h3 className="font-display text-2xl tracking-[-0.01em]">{t.title}</h3>
-                <p className="mt-1.5 text-muted-foreground">{t.note}</p>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <Reveal>
-            <h2 className="font-display text-4xl md:text-5xl tracking-[-0.02em] mb-12">Where it goes</h2>
-          </Reveal>
-          <div className="space-y-10">
-            {roadmap.map((r, i) => (
-              <Reveal key={i} delay={i * 0.06}>
-                <div className="flex items-center gap-3">
-                  <h3 className="font-display text-2xl tracking-[-0.01em]">{r.title}</h3>
-                  {i === 0 && <span className="text-sm text-[var(--olive-deep)]">— current</span>}
-                </div>
-                <p className="mt-2 text-muted-foreground">{r.items.join(" · ")}</p>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Demo CTA — contained, green-graded field photo card */}
-      <section id="demo" className="max-w-6xl mx-auto px-6 py-32 md:py-44">
-        <Reveal>
-          <div className="relative overflow-hidden rounded-3xl">
-            {/* Photo */}
-            <Image
-              src="/cta-field.jpg"
-              alt=""
-              fill
-              sizes="(max-width: 1152px) 100vw, 1152px"
-              className="object-cover object-center"
-              priority
-            />
-            {/* Even green duotone grade — unifies the photo into the brand */}
-            <div className="absolute inset-0 mix-blend-multiply" style={{ background: "#46541f" }} />
-            <div className="absolute inset-0" style={{ background: "rgba(20,24,12,0.5)" }} />
-
-            <div className="relative z-10 px-6 py-28 md:py-40 text-center">
-              <h2 className="font-display text-5xl md:text-7xl tracking-[-0.03em] leading-[1.02] text-[var(--paper)]">
-                See it read a leaf.
-              </h2>
-              <Link
-                href="/demo"
-                className="group mt-12 inline-flex items-center gap-3 bg-[var(--paper)] text-[var(--ink)] rounded-full pl-8 pr-3 py-3.5 text-lg hover:bg-white transition-colors"
-              >
-                Open the demo
-                <span className="w-9 h-9 rounded-full bg-[var(--ink)]/10 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
-                  <ArrowRight className="w-4 h-4" />
-                </span>
-              </Link>
+          <div className="mt-16 md:mt-24 grid md:grid-cols-[1fr_1.2fr] gap-10 md:gap-16 items-stretch">
+            <Reveal className="relative min-h-[420px] md:min-h-0 overflow-hidden">
+              <Image
+                src="/photos/leaf-macro.jpg"
+                alt="Dense dark foliage in close-up"
+                fill
+                sizes="(max-width: 768px) 100vw, 480px"
+                className="object-cover img-grade"
+              />
+            </Reveal>
+            <div>
+              {technology.map((t, i) => (
+                <Reveal key={i} delay={i * 0.05}>
+                  <div className={`py-7 ${i > 0 ? "border-t border-[var(--hairline)]" : ""}`}>
+                    <h3 className="font-display text-xl md:text-2xl font-medium tracking-[-0.02em]">{t.title}</h3>
+                    <p className="mt-2 text-muted-foreground leading-relaxed max-w-lg">{t.note}</p>
+                  </div>
+                </Reveal>
+              ))}
             </div>
           </div>
-        </Reveal>
+        </div>
+      </section>
+
+      {/* Numbers */}
+      <section className="border-t border-[var(--hairline)]">
+        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
+          <div className="grid sm:grid-cols-3 gap-14 md:gap-10">
+            {stats.map((s, i) => (
+              <Reveal key={i} delay={i * 0.08}>
+                <p className="font-display text-6xl md:text-7xl font-medium tracking-[-0.04em]">{s.value}</p>
+                <p className="mt-4 text-muted-foreground leading-relaxed max-w-[17rem]">{s.label}</p>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Applications */}
+      <section id="applications" className="border-t border-[var(--hairline)]">
+        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
+          <div>
+            {applications.map((a, i) => (
+              <Reveal key={i} delay={i * 0.04}>
+                <div className="grid md:grid-cols-2 gap-2 md:gap-8 py-8 border-t border-[var(--hairline)]">
+                  <h3 className="font-display text-2xl md:text-3xl font-medium tracking-[-0.02em]">{a.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed self-center">{a.note}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Story */}
+      <section id="story" className="border-t border-[var(--hairline)]">
+        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
+          <div>
+            {story.map((item, i) => (
+              <Reveal key={i} delay={i * 0.04}>
+                <div className="grid grid-cols-1 md:grid-cols-[6rem_1fr_1fr] gap-4 md:gap-8 py-10 border-t border-[var(--hairline)]">
+                  <span className="font-label text-muted-foreground">{item.year}</span>
+                  <div>
+                    <h3 className="font-display text-2xl md:text-3xl font-medium tracking-[-0.02em]">{item.title}</h3>
+                    <p className="mt-3 text-muted-foreground leading-relaxed max-w-md">{item.note}</p>
+                  </div>
+                  {item.image && (
+                    <div className="relative aspect-[4/3] overflow-hidden md:justify-self-end w-full max-w-sm">
+                      <Image
+                        src={hackathonImg}
+                        alt="The Apollo team at the AI500 Hackathon"
+                        fill
+                        sizes="(max-width: 768px) 100vw, 384px"
+                        className="object-cover img-grade"
+                      />
+                    </div>
+                  )}
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Demo CTA */}
+      <section className="bg-[var(--olive)] text-[var(--bg)]">
+        <div className="max-w-6xl mx-auto px-6 py-32 md:py-44 text-center">
+          <Reveal>
+            <h2 className="font-display text-5xl md:text-7xl font-medium tracking-[-0.04em] leading-[1.02]">
+              See it read a leaf.
+            </h2>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <div className="mt-12 flex flex-wrap items-center justify-center gap-5">
+              <Link href="/demo" className="btn-block btn-block--inverse">Open the demo</Link>
+              <Link href="/field" className="ulink text-[var(--sage-light)] hover:text-[var(--bg)] text-[15px]">
+                Enter the field
+              </Link>
+            </div>
+          </Reveal>
+        </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-[var(--secondary)] overflow-hidden">
-        <div className="max-w-6xl mx-auto px-6 pt-20 md:pt-28 pb-10">
-          {/* Top row: nav + socials + back to top */}
-          <div className="flex flex-wrap items-center justify-between gap-6">
-            <nav className="flex gap-7 text-[15px] text-muted-foreground">
-              <a href="#approach" className="ulink">Approach</a>
-              <Link href="/field" className="ulink">Field</Link>
-              <Link href="/demo" className="ulink">Demo</Link>
-            </nav>
-            <div className="flex items-center gap-5">
-              <a href="https://github.com/bilalsea2/apollo-ai" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                <Github className="h-[18px] w-[18px] text-muted-foreground hover:text-foreground transition-colors" strokeWidth={1.5} />
-              </a>
-              <a href="https://www.linkedin.com/in/bilalsea/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                <Linkedin className="h-[18px] w-[18px] text-muted-foreground hover:text-foreground transition-colors" strokeWidth={1.5} />
-              </a>
-              <a href="#top" className="ml-2 inline-flex items-center gap-1.5 text-[15px] text-muted-foreground hover:text-foreground transition-colors">
-                Top <ArrowUp className="h-4 w-4" strokeWidth={1.5} />
-              </a>
+      <footer className="bg-[#121410] text-[var(--bg)]">
+        <div className="max-w-6xl mx-auto px-6 pt-20 md:pt-28">
+          <div className="flex flex-wrap justify-between gap-x-12 gap-y-14">
+            <div className="max-w-xs">
+              <Logo size={44} color="var(--sage)" />
+              <p className="mt-6 leading-relaxed text-[rgba(250,250,250,0.55)]">
+                Crop intelligence from any camera. Built in Tashkent, Uzbekistan.
+              </p>
+            </div>
+            <div className="flex gap-14 md:gap-24 text-sm">
+              <div className="flex flex-col gap-3.5">
+                <a href="#platform" className="flink">Platform</a>
+                <a href="#technology" className="flink">Technology</a>
+                <a href="#applications" className="flink">Applications</a>
+                <a href="#story" className="flink">Story</a>
+              </div>
+              <div className="flex flex-col gap-3.5">
+                <Link href="/demo" className="flink">Demo</Link>
+                <Link href="/field" className="flink">Field</Link>
+              </div>
+              <div className="flex flex-col gap-3.5">
+                <a href="https://github.com/bilalsea2/apollo-ai" target="_blank" rel="noopener noreferrer" className="flink">GitHub</a>
+                <a href="https://www.linkedin.com/in/bilalsea/" target="_blank" rel="noopener noreferrer" className="flink">LinkedIn</a>
+                <a href="https://ai500.agrobank.uz/" target="_blank" rel="noopener noreferrer" className="flink">AI500</a>
+              </div>
             </div>
           </div>
 
-          {/* Oversized pointillism wordmark */}
-          <PointillismWord text="Apollo" className="mt-14 md:mt-16 w-full" />
+          {/* Oversized wordmark, cropped at the bottom edge */}
+          <div className="mt-16 md:mt-24 overflow-hidden" aria-hidden>
+            <p
+              className="font-display font-medium select-none text-[var(--sage)] leading-[0.78] tracking-[-0.05em] text-center"
+              style={{ fontSize: "clamp(5.5rem, 20vw, 20rem)", marginBottom: "-0.16em" }}
+            >
+              Apollo
+            </p>
+          </div>
         </div>
       </footer>
     </div>
