@@ -157,16 +157,22 @@ export default function Home() {
   const maskRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: maskRef, offset: ["start start", "end end"] });
 
-  const [coverScale, setCoverScale] = useState(16);
+  /* The leaf is a pointed lens, so cover is driven by its narrow axis:
+     the lens half-width is ~0.154 of the rendered box (210px). */
+  const [coverScale, setCoverScale] = useState(40);
   useEffect(() => {
-    const compute = () => setCoverScale((Math.max(window.innerWidth, window.innerHeight) / 132) * 1.5);
+    const compute = () => {
+      const minorRadius = 210 * 0.154;
+      const reach = Math.hypot(window.innerWidth / 2, window.innerHeight / 2 + 120);
+      setCoverScale((reach / minorRadius) * 1.25);
+    };
     compute();
     window.addEventListener("resize", compute);
     return () => window.removeEventListener("resize", compute);
   }, []);
 
-  const squareScale = useTransform(scrollYProgress, [0.05, 0.42], [0.35, coverScale]);
-  const squareOpacity = useTransform(scrollYProgress, [0.03, 0.09], [0, 1]);
+  const leafScale = useTransform(scrollYProgress, [0.05, 0.42], [1, coverScale]);
+  const veinOpacity = useTransform(scrollYProgress, [0.05, 0.12], [1, 0]);
   const lockupOpacity = useTransform(scrollYProgress, [0.04, 0.12], [1, 0]);
   const hintOpacity = useTransform(scrollYProgress, [0, 0.05], [1, 0]);
   const circleR = useTransform(scrollYProgress, [0.46, 0.9], ["0%", "120%"]);
@@ -220,13 +226,8 @@ export default function Home() {
             style={{ opacity: lockupOpacity }}
             className="absolute inset-0 flex flex-col items-center justify-center gap-8 z-10"
           >
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: loaded ? 1 : 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <Mark size={210} />
-            </motion.div>
+            {/* Spacer where the leaf sits; the leaf itself lives on the growing layer */}
+            <div style={{ width: 210, height: 210 }} aria-hidden />
             <motion.h1
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: loaded ? 1 : 0, y: loaded ? 0 : 10 }}
@@ -245,10 +246,43 @@ export default function Home() {
             </motion.p>
           </motion.div>
 
-          {/* The growing square (fades in as the lockup fades out) */}
-          <div className="absolute inset-0 flex items-center justify-center" style={{ transform: "translateY(-96px)" }}>
-            <motion.div style={{ scale: squareScale, opacity: squareOpacity }} className="w-[132px] h-[132px] bg-[var(--olive)]" />
-          </div>
+          {/* The growing leaf: the hero mark itself scales to swallow the viewport.
+              This layer mirrors the lockup's layout so the leaf aligns exactly
+              with the spacer above; the vein and stem dissolve as it grows. */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: loaded ? 1 : 0 }}
+            transition={{ duration: 0.8 }}
+            className="absolute inset-0 flex flex-col items-center justify-center gap-8"
+            aria-hidden
+          >
+            <motion.svg
+              width={210}
+              height={210}
+              viewBox="0 0 100 100"
+              fill="none"
+              style={{ scale: leafScale }}
+            >
+              <path d="M 30 82 A 54 54 0 0 1 70 18 A 54 54 0 0 1 30 82 Z" fill="var(--olive)" />
+              <motion.path
+                d="M 34 78 L 66 22"
+                stroke="var(--bg)"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                style={{ opacity: veinOpacity }}
+              />
+              <motion.path
+                d="M 30 82 Q 24 88 22 94"
+                stroke="var(--olive)"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                style={{ opacity: veinOpacity }}
+              />
+            </motion.svg>
+            {/* Invisible copies of the lockup text keep the flex geometry identical */}
+            <h1 className="font-display text-5xl md:text-7xl font-medium tracking-[-0.04em] opacity-0 select-none">Apollo</h1>
+            <p className="font-label opacity-0 select-none">Superintelligent vision for the growing world</p>
+          </motion.div>
 
           {/* White layer revealed through a circle, carrying the manifesto lead */}
           <motion.div style={{ clipPath: clip }} className="absolute inset-0 bg-background z-20 flex items-center justify-center">
