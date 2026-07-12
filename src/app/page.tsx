@@ -191,7 +191,7 @@ export default function Home() {
         style={{ pointerEvents: loaded ? "none" : "auto" }}
       >
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-7">
-          <Mark size={72} />
+          <Mark size={110} />
           <p className="font-display text-4xl md:text-5xl font-medium tracking-[-0.03em]">Apollo</p>
         </div>
         <p className="absolute bottom-8 right-8 font-display text-6xl md:text-8xl font-medium tracking-[-0.04em] tabular-nums">
@@ -233,7 +233,7 @@ export default function Home() {
               animate={{ opacity: loaded ? 1 : 0 }}
               transition={{ duration: 0.8 }}
             >
-              <Mark size={104} />
+              <Mark size={160} />
             </motion.div>
             <motion.h1
               initial={{ opacity: 0, y: 10 }}
