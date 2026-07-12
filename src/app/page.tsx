@@ -121,9 +121,6 @@ const Reveal = ({ children, className = "", delay = 0 }: { children: React.React
   );
 };
 
-/* The Apollo leaf mark */
-const Mark = ({ size = 56 }: { size?: number }) => <Logo size={size} />;
-
 /* ────────────────────────────────────────────────
    Page
    ──────────────────────────────────────────────── */
@@ -189,7 +186,7 @@ export default function Home() {
         style={{ pointerEvents: loaded ? "none" : "auto" }}
       >
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-7">
-          <Mark size={140} />
+          <Logo size={140} />
           <p className="font-display text-4xl md:text-5xl font-medium tracking-[-0.03em]">Apollo</p>
         </div>
         <p className="absolute bottom-8 right-8 font-display text-6xl md:text-8xl font-medium tracking-[-0.04em] tabular-nums">

@@ -35,7 +35,7 @@ export default function FieldPage() {
                     <p className="font-label text-muted-foreground">Loading terrain</p>
                 </div>
             }>
-                <DroneScanner3D interactive showHud />
+                <DroneScanner3D />
             </Suspense>
 
             {/* Top bar */}

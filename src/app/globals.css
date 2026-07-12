@@ -106,10 +106,6 @@
 
 /* ---- Layout primitives ---- */
 
-.hairline {
-  border-color: var(--hairline);
-}
-
 /* Quiet text link, color shift only */
 .ulink {
   color: inherit;
@@ -157,18 +153,6 @@
 .btn-block--inverse:hover {
   background: var(--sage-light);
   border-color: var(--sage-light);
-  color: var(--ink);
-}
-
-.btn-block--ghost {
-  background: transparent;
-  color: var(--ink);
-  border-color: var(--hairline-strong);
-}
-
-.btn-block--ghost:hover {
-  background: transparent;
-  border-color: var(--ink);
   color: var(--ink);
 }
 
