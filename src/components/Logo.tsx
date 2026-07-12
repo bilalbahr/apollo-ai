@@ -1,6 +1,6 @@
 /* Apollo mark: a geometric leaf drawn from two circle arcs.
-   Single color, inherits size via props; color fixed to the olive token. */
-export const Logo = ({ size = 56 }: { size?: number }) => (
+   Single color via the `color` prop; the vein takes the page background. */
+export const Logo = ({ size = 56, color = "var(--olive)" }: { size?: number; color?: string }) => (
   <svg
     width={size}
     height={size}
@@ -12,7 +12,7 @@ export const Logo = ({ size = 56 }: { size?: number }) => (
   >
     <path
       d="M 30 82 A 54 54 0 0 1 70 18 A 54 54 0 0 1 30 82 Z"
-      fill="var(--olive)"
+      fill={color}
     />
     <path
       d="M 34 78 L 66 22"
@@ -22,7 +22,7 @@ export const Logo = ({ size = 56 }: { size?: number }) => (
     />
     <path
       d="M 30 82 Q 24 88 22 94"
-      stroke="var(--olive)"
+      stroke={color}
       strokeWidth="3.5"
       strokeLinecap="round"
     />

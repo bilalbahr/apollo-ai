@@ -452,33 +452,42 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer style={{ background: "linear-gradient(to bottom, var(--bg), var(--sage-light))" }}>
-        <div className="max-w-6xl mx-auto px-6 pt-20 pb-14">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-10 text-sm">
-            <div className="flex flex-col gap-3">
-              <a href="#platform" className="ulink">Platform</a>
-              <a href="#technology" className="ulink">Technology</a>
-              <a href="#applications" className="ulink">Applications</a>
-              <a href="#story" className="ulink">Story</a>
+      <footer className="bg-[#121410] text-[var(--bg)]">
+        <div className="max-w-6xl mx-auto px-6 pt-20 md:pt-28">
+          <div className="flex flex-wrap justify-between gap-x-12 gap-y-14">
+            <div className="max-w-xs">
+              <Logo size={44} color="var(--sage)" />
+              <p className="mt-6 leading-relaxed text-[rgba(250,250,250,0.55)]">
+                Crop intelligence from any camera. Built in Tashkent, Uzbekistan.
+              </p>
             </div>
-            <div className="flex flex-col gap-3 md:items-center">
-              <div className="flex flex-col gap-3 md:text-center">
-                <Link href="/demo" className="ulink">Demo</Link>
-                <Link href="/field" className="ulink">Field</Link>
+            <div className="flex gap-14 md:gap-24 text-sm">
+              <div className="flex flex-col gap-3.5">
+                <a href="#platform" className="flink">Platform</a>
+                <a href="#technology" className="flink">Technology</a>
+                <a href="#applications" className="flink">Applications</a>
+                <a href="#story" className="flink">Story</a>
+              </div>
+              <div className="flex flex-col gap-3.5">
+                <Link href="/demo" className="flink">Demo</Link>
+                <Link href="/field" className="flink">Field</Link>
+              </div>
+              <div className="flex flex-col gap-3.5">
+                <a href="https://github.com/bilalsea2/apollo-ai" target="_blank" rel="noopener noreferrer" className="flink">GitHub</a>
+                <a href="https://www.linkedin.com/in/bilalsea/" target="_blank" rel="noopener noreferrer" className="flink">LinkedIn</a>
+                <a href="https://ai500.agrobank.uz/" target="_blank" rel="noopener noreferrer" className="flink">AI500</a>
               </div>
             </div>
-            <div className="flex flex-col gap-3 md:items-end col-span-2 md:col-span-1">
-              <a href="https://github.com/bilalsea2/apollo-ai" target="_blank" rel="noopener noreferrer" className="ulink">GitHub</a>
-              <a href="https://www.linkedin.com/in/bilalsea/" target="_blank" rel="noopener noreferrer" className="ulink">LinkedIn</a>
-              <a href="https://ai500.agrobank.uz/" target="_blank" rel="noopener noreferrer" className="ulink">AI500 Hackathon</a>
-            </div>
           </div>
-          <div className="mt-20 flex items-end justify-between">
-            <div className="flex items-center gap-3">
-              <Mark size={28} />
-              <span className="font-display text-lg font-medium tracking-[-0.02em]">Apollo</span>
-            </div>
-            <p className="text-sm text-muted-foreground">Tashkent, Uzbekistan</p>
+
+          {/* Oversized wordmark, cropped at the bottom edge */}
+          <div className="mt-16 md:mt-24 overflow-hidden" aria-hidden>
+            <p
+              className="font-display font-medium select-none text-[var(--sage)] leading-[0.78] tracking-[-0.05em] text-center"
+              style={{ fontSize: "clamp(5.5rem, 20vw, 20rem)", marginBottom: "-0.16em" }}
+            >
+              Apollo
+            </p>
           </div>
         </div>
       </footer>

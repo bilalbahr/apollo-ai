@@ -120,6 +120,16 @@
   color: var(--olive);
 }
 
+/* Footer link on the dark ink surface */
+.flink {
+  color: rgba(250, 250, 250, 0.55);
+  transition: color 0.25s ease;
+}
+
+.flink:hover {
+  color: var(--bg);
+}
+
 /* Solid block button, Matter-style rectangle */
 .btn-block {
   display: inline-flex;
