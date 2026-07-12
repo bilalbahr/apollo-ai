@@ -127,11 +127,9 @@ const Reveal = ({ children, className = "", delay = 0 }: { children: React.React
   );
 };
 
-/* The mark: olive square holding an off-white circle */
+/* The Apollo plant mark */
 const Mark = ({ size = 56 }: { size?: number }) => (
-  <div style={{ width: size, height: size, background: "var(--olive)" }} className="flex items-center justify-center">
-    <div style={{ width: size * 0.62, height: size * 0.62, background: "var(--bg)" }} className="rounded-full" />
-  </div>
+  <Image src="/apollologo.png" alt="Apollo" width={size} height={size} style={{ width: size, height: size }} />
 );
 
 /* ────────────────────────────────────────────────
@@ -175,7 +173,8 @@ export default function Home() {
     return () => window.removeEventListener("resize", compute);
   }, []);
 
-  const squareScale = useTransform(scrollYProgress, [0.05, 0.42], [1, coverScale]);
+  const squareScale = useTransform(scrollYProgress, [0.05, 0.42], [0.35, coverScale]);
+  const squareOpacity = useTransform(scrollYProgress, [0.03, 0.09], [0, 1]);
   const lockupOpacity = useTransform(scrollYProgress, [0.04, 0.12], [1, 0]);
   const hintOpacity = useTransform(scrollYProgress, [0, 0.05], [1, 0]);
   const circleR = useTransform(scrollYProgress, [0.46, 0.9], ["0%", "120%"]);
@@ -229,7 +228,13 @@ export default function Home() {
             style={{ opacity: lockupOpacity }}
             className="absolute inset-0 flex flex-col items-center justify-center gap-8 z-10"
           >
-            <div className="h-[72px]" aria-hidden />
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: loaded ? 1 : 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <Mark size={104} />
+            </motion.div>
             <motion.h1
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: loaded ? 1 : 0, y: loaded ? 0 : 10 }}
@@ -248,11 +253,9 @@ export default function Home() {
             </motion.p>
           </motion.div>
 
-          {/* The growing square (sits where the lockup's mark is) */}
+          {/* The growing square (fades in as the lockup fades out) */}
           <div className="absolute inset-0 flex items-center justify-center" style={{ transform: "translateY(-96px)" }}>
-            <motion.div style={{ scale: squareScale }} className="w-[132px] h-[132px] bg-[var(--olive)] flex items-center justify-center">
-              <div className="w-[62%] h-[62%] rounded-full bg-[var(--bg)]" />
-            </motion.div>
+            <motion.div style={{ scale: squareScale, opacity: squareOpacity }} className="w-[132px] h-[132px] bg-[var(--olive)]" />
           </div>
 
           {/* White layer revealed through a circle, carrying the manifesto lead */}

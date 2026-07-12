@@ -245,9 +245,7 @@ export default function DemoPage() {
                         <span>Back</span>
                     </Link>
                     <div className="flex items-center gap-2.5">
-                        <div className="w-6 h-6 bg-[var(--olive)] flex items-center justify-center">
-                            <div className="w-[62%] h-[62%] rounded-full bg-[var(--bg)]" />
-                        </div>
+                        <Image src="/apollologo.png" alt="Apollo" width={26} height={26} className="w-[26px] h-[26px]" />
                         <span className="font-display text-lg font-medium tracking-[-0.02em]">Apollo</span>
                     </div>
                     <div className="w-[60px]" />

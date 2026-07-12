@@ -2,6 +2,7 @@
 
 import { lazy, Suspense, useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 const DroneScanner3D = lazy(() =>
@@ -25,9 +26,7 @@ export default function FieldPage() {
                 transition={{ duration: 0.7, ease: "easeOut" }}
                 style={{ pointerEvents: entered ? "none" : "auto" }}
             >
-                <div className="w-14 h-14 bg-[var(--olive)] flex items-center justify-center">
-                    <div className="w-[62%] h-[62%] rounded-full bg-[var(--bg)]" />
-                </div>
+                <Image src="/apollologo.png" alt="Apollo" width={64} height={64} className="w-16 h-16" />
                 <p className="font-label text-muted-foreground">Initializing field simulation</p>
             </motion.div>
 
