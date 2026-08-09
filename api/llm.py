@@ -34,7 +34,7 @@ def generate_disease_report(disease_name: str, confidence: float, top_probs: lis
         )
 
         completion = client.chat.completions.create(
-            model="moonshotai/kimi-k2-instruct-0905",
+            model="openai/gpt-oss-120b",
             messages=[
                 {
                     "role": "user",
