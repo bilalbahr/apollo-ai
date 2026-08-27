@@ -7,3 +7,4 @@ pillow
 groq
 python-dotenv
 aiogram
+httpx

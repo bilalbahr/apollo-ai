@@ -166,3 +166,18 @@
   0% { transform: scaleX(0); }
   100% { transform: scaleX(1); }
 }
+
+/* Scan line sweeping the preview while a diagnosis runs */
+@keyframes scanline {
+  0%   { top: 0%; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-\[scanline_1\.6s_ease-in-out_infinite\] {
+    animation: none;
+    top: 50%;
+  }
+}

@@ -5,11 +5,19 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-# Initialize Groq client
-# Ensure GROQ_API_KEY is set in your .env file
-client = Groq(
-    api_key=os.environ.get("GROQ_API_KEY"),
-)
+# Groq client is created lazily: importing this module must never fail just
+# because GROQ_API_KEY is unset, or the whole API fails to boot.
+_client = None
+
+
+def get_client():
+    global _client
+    if _client is None:
+        key = os.environ.get("GROQ_API_KEY")
+        if not key:
+            return None
+        _client = Groq(api_key=key)
+    return _client
 
 def generate_disease_report(disease_name: str, confidence: float, top_probs: list[str] = None) -> str:
     """
@@ -32,6 +40,10 @@ def generate_disease_report(disease_name: str, confidence: float, top_probs: lis
             f"Do not use markdown formatting like bolding, just plain text or simple bullets if needed. "
             f"Keep it extremely concise."
         )
+
+        client = get_client()
+        if client is None:
+            return "AI insights are unavailable: GROQ_API_KEY is not set."
 
         completion = client.chat.completions.create(
             model="openai/gpt-oss-120b",

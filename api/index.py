@@ -9,6 +9,11 @@ import sys
 import uvicorn
 from pydantic import BaseModel
 
+try:
+    from api.providers import CLASSES, build_provider, split_label
+except ImportError:
+    from providers import CLASSES, build_provider, split_label
+
 # Add project root to sys.path to allow importing from bot
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -16,7 +21,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 try:
     from bot.main import bot, dp, load_model as load_bot_model
     from aiogram import types
-except ImportError as e:
+except BaseException as e:
+    # bot/main.py sys.exit()s without TELEGRAM_BOT_TOKEN; SystemExit is not an ImportError.
     print(f"Warning: Could not import bot components: {e}")
     bot = None
     dp = None
@@ -32,22 +38,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Classes list (Same as bot/main.py, ideally shared)
-CLASSES = [
-    'Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy',
-    'Blueberry___healthy', 'Cherry_(including_sour)___Powdery_mildew',
-    'Cherry_(including_sour)___healthy', 'Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot',
-    'Corn_(maize)___Common_rust_', 'Corn_(maize)___Northern_Leaf_Blight', 'Corn_(maize)___healthy',
-    'Grape___Black_rot', 'Grape___Esca_(Black_Measles)', 'Grape___Leaf_blight_(Isariopsis_Leaf_Spot)',
-    'Grape___healthy', 'Orange___Haunglongbing_(Citrus_greening)', 'Peach___Bacterial_spot',
-    'Peach___healthy', 'Pepper,_bell___Bacterial_spot', 'Pepper,_bell___healthy',
-    'Potato___Early_blight', 'Potato___Late_blight', 'Potato___healthy', 'Raspberry___healthy',
-    'Soybean___healthy', 'Squash___Powdery_mildew', 'Strawberry___Leaf_scorch', 'Strawberry___healthy',
-    'Tomato___Bacterial_spot', 'Tomato___Early_blight', 'Tomato___Late_blight', 'Tomato___Leaf_Mold',
-    'Tomato___Septoria_leaf_spot', 'Tomato___Spider_mites Two-spotted_spider_mite',
-    'Tomato___Target_Spot', 'Tomato___Tomato_Yellow_Leaf_Curl_Virus', 'Tomato___Tomato_mosaic_virus',
-    'Tomato___healthy'
-]
 
 # Load API Model (Separate session from Bot to avoid conflict or reuse if we want)
 # Robust path finding for Vercel and Local
@@ -68,13 +58,9 @@ except Exception as e:
     print(f"Failed to load API model: {e}")
     session = None
 
-def preprocess_image(image_bytes):
-    img = Image.open(io.BytesIO(image_bytes)).convert('RGB')
-    img = img.resize((256, 256))
-    img_array = np.array(img).astype(np.float32) / 255.0
-    img_array = img_array.transpose(2, 0, 1) # C, H, W
-    input_tensor = np.expand_dims(img_array, axis=0) # Batch
-    return input_tensor
+# The diagnosis engine. Swap with APOLLO_PROVIDER=local|plantix.
+provider = build_provider(session)
+print(f"Diagnosis provider: {provider.name if provider else 'none'}")
 
 @app.on_event("startup")
 async def on_startup():
@@ -87,8 +73,9 @@ async def on_startup():
 @app.get("/api/health")
 def health_check():
     return {
-        "status": "ok", 
-        "model_loaded": session is not None,
+        "status": "ok",
+        "model_loaded": provider is not None,
+        "provider": provider.name if provider else None,
         "bot_loaded": bot is not None
     }
 
@@ -98,31 +85,12 @@ def health_check_root():
 
 @app.post("/api/predict")
 async def predict(file: UploadFile = File(...)):
-    if not session:
-        raise HTTPException(status_code=500, detail="Model not loaded")
-    
+    if not provider:
+        raise HTTPException(status_code=503, detail="No diagnosis provider available")
+
     try:
         contents = await file.read()
-        input_tensor = preprocess_image(contents)
-        
-        input_name = session.get_inputs()[0].name
-        output_name = session.get_outputs()[0].name
-        result = session.run([output_name], {input_name: input_tensor})
-        
-        logits = result[0][0]
-        exp_preds = np.exp(logits)
-        probs = exp_preds / np.sum(exp_preds)
-        
-        max_idx = np.argmax(probs)
-        confidence = float(probs[max_idx])
-        class_name = CLASSES[max_idx] if max_idx < len(CLASSES) else "Unknown"
-        
-        return {
-            "class": class_name,
-            "confidence": confidence,
-            "all_probs": {cls: float(prob) for cls, prob in zip(CLASSES, probs)}
-        }
-        
+        return provider.diagnose(contents).as_dict()
     except Exception as e:
         print(f"Prediction error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
